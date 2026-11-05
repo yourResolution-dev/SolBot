@@ -97,11 +97,11 @@ export function Textarea({ error, className, ...props }: TextareaProps) {
 
 interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   error?: boolean
-  options: { value: string; label: string }[]
+  options?: { value: string; label: string }[]
   placeholder?: string
 }
 
-export function Select({ error, options, placeholder, className, ...props }: SelectProps) {
+export function Select({ error, options, placeholder, children, className, ...props }: SelectProps) {
   return (
     <select
       className={cn(
@@ -112,7 +112,7 @@ export function Select({ error, options, placeholder, className, ...props }: Sel
       {...props}
     >
       {placeholder && <option value="">{placeholder}</option>}
-      {options.map((o) => (
+      {children || options?.map((o) => (
         <option key={o.value} value={o.value}>{o.label}</option>
       ))}
     </select>

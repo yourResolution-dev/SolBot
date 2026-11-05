@@ -14,11 +14,17 @@ import {
   Clock,
   Check,
   CheckCheck,
+  MoreVertical,
+  AlertTriangle,
+  Copy,
+  Download,
+  FileText,
 } from 'lucide-react'
 import type { Conversation, ChatMessage } from '@/lib/inboxData'
 import { ChannelIcon } from '@/components/ui/Avatar'
 import { PriorityBadge, TicketStatusBadge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
+import { ActionMenu } from '@/components/ui/ActionMenu'
 import { useToast } from '@/components/ui/Toast'
 import { cn } from '@/lib/utils'
 
@@ -30,6 +36,7 @@ interface ChatAreaProps {
   onAssignChange: (newAssignee: string) => void
   onToggleDetails: () => void
   showDetails: boolean
+  onEscalatePriority?: () => void
 }
 
 export function ChatArea({
@@ -40,6 +47,7 @@ export function ChatArea({
   onAssignChange,
   onToggleDetails,
   showDetails,
+  onEscalatePriority,
 }: ChatAreaProps) {
   const { toast } = useToast()
   const [inputText, setInputText] = useState('')
@@ -63,6 +71,43 @@ export function ChatArea({
       e.preventDefault()
       handleSend()
     }
+  }
+
+  const handleInsertCanned = (text: string) => {
+    setInputText((prev) => (prev ? `${prev} ${text}` : text))
+    toast({
+      type: 'info',
+      title: 'Template Inserted',
+      description: 'Canned response added to reply composer.',
+    })
+  }
+
+  const handleExportTranscript = () => {
+    const transcript = [
+      `Resolution Support AI - Conversation Transcript`,
+      `Ticket: ${conversation.ticketNumber}`,
+      `Customer: ${conversation.customer.name} (${conversation.customer.phone})`,
+      `Channel: ${conversation.channel.toUpperCase()}`,
+      `Status: ${conversation.status.toUpperCase()}`,
+      `---------------------------------------------`,
+      ...conversation.messages.map(
+        (m) => `[${m.time}] [${m.sender.toUpperCase()}]: ${m.text}`
+      ),
+    ].join('\n')
+
+    const blob = new Blob([transcript], { type: 'text/plain' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `transcript-${conversation.ticketNumber}.txt`
+    a.click()
+    URL.revokeObjectURL(url)
+
+    toast({
+      type: 'success',
+      title: 'Transcript Exported',
+      description: `Downloaded conversation transcript for ${conversation.ticketNumber}.`,
+    })
   }
 
   return (
@@ -97,7 +142,7 @@ export function ChatArea({
             size="xs"
             leftIcon={conversation.aiActive ? <Pause size={12} /> : <Bot size={12} />}
             onClick={onToggleAI}
-            title={conversation.aiActive ? 'Pause AI Copilot to take over' : 'Resume AI Copilot'}
+            title="Toggle AI Copilot vs Human Takeover (Alt+A)"
           >
             {conversation.aiActive ? 'AI Copilot Active' : 'Human Takeover'}
           </Button>
@@ -109,6 +154,7 @@ export function ChatArea({
               size="xs"
               leftIcon={<CheckCircle size={12} />}
               onClick={onResolve}
+              title="Mark ticket resolved (Alt+R)"
             >
               Resolve
             </Button>
@@ -120,10 +166,53 @@ export function ChatArea({
             size="xs"
             onClick={onToggleDetails}
             className={showDetails ? 'bg-slate-100 text-slate-900' : ''}
-            title="Toggle customer details panel"
+            title="Toggle customer details panel (Alt+D)"
           >
             <Info size={16} />
           </Button>
+
+          {/* Contextual Action Menu */}
+          <ActionMenu
+            items={[
+              {
+                id: 'template-order',
+                label: 'Insert: Order Status Update',
+                icon: <FileText size={14} className="text-violet-600" />,
+                onClick: () =>
+                  handleInsertCanned(
+                    `Hello ${conversation.customer.name}, your order has been verified and our fulfillment team is tracking dispatch.`
+                  ),
+              },
+              {
+                id: 'template-survey',
+                label: 'Insert: Satisfaction Follow-up',
+                icon: <Smile size={14} className="text-amber-500" />,
+                onClick: () =>
+                  handleInsertCanned(
+                    `Thank you for contacting Resolution Support! Please rate your experience on a scale of 1-5.`
+                  ),
+              },
+              {
+                id: 'copy-link',
+                label: 'Copy Ticket Link',
+                icon: <Copy size={14} className="text-slate-500" />,
+                onClick: () => {
+                  navigator.clipboard?.writeText(window.location.href)
+                  toast({
+                    type: 'info',
+                    title: 'Copied',
+                    description: 'Direct link copied to clipboard.',
+                  })
+                },
+              },
+              {
+                id: 'export-transcript',
+                label: 'Export Conversation File',
+                icon: <Download size={14} className="text-emerald-600" />,
+                onClick: handleExportTranscript,
+              },
+            ]}
+          />
         </div>
       </div>
 
@@ -147,43 +236,47 @@ export function ChatArea({
           return (
             <div
               key={msg.id}
-              className={cn('flex flex-col max-w-[85%] sm:max-w-[70%]', {
-                'mr-auto items-start': isCustomer,
-                'ml-auto items-end': !isCustomer,
-              })}
+              className={cn('flex flex-col', isCustomer ? 'items-start' : 'items-end')}
             >
-              {/* Sender Pill */}
               <div className="flex items-center gap-1.5 mb-1 px-1 text-[11px] text-slate-400">
-                {isCustomer ? (
-                  <span>{conversation.customer.name}</span>
-                ) : isAI ? (
-                  <span className="font-semibold text-violet-600 flex items-center gap-1">
-                    <Sparkles size={11} /> Resolution AI Agent
-                  </span>
-                ) : (
-                  <span className="font-semibold text-slate-700">
-                    {conversation.assignedTo} (Agent)
-                  </span>
-                )}
+                <span className="font-semibold text-slate-600">
+                  {isCustomer
+                    ? conversation.customer.name
+                    : isAI
+                    ? 'Resolution Copilot (AI)'
+                    : 'Julian Sterling (You)'}
+                </span>
                 <span>&bull;</span>
                 <span>{msg.time}</span>
+                {isAI && (
+                  <span className="inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded-full bg-violet-100 text-violet-700 text-[9px] font-bold">
+                    <Sparkles size={8} /> Auto-Reply
+                  </span>
+                )}
               </div>
 
-              {/* Message Bubble */}
               <div
-                className={cn('rounded-2xl p-3.5 text-xs sm:text-sm leading-relaxed shadow-xs relative', {
-                  'bg-white text-slate-800 border border-slate-200/70 rounded-tl-xs': isCustomer,
-                  'bg-gradient-to-r from-violet-600 to-indigo-600 text-white rounded-tr-xs': !isCustomer && !isAI,
-                  'bg-violet-50 border border-violet-200/80 text-violet-950 rounded-tr-xs shadow-xs': isAI,
-                })}
+                className={cn(
+                  'max-w-md sm:max-w-lg rounded-2xl p-3.5 shadow-card text-xs sm:text-sm leading-relaxed whitespace-pre-wrap break-words',
+                  isCustomer
+                    ? 'bg-white border border-slate-200/80 text-slate-800 rounded-tl-xs'
+                    : isAI
+                    ? 'bg-violet-50/90 border border-violet-200/80 text-violet-950 rounded-tr-xs'
+                    : 'bg-violet-600 text-white rounded-tr-xs'
+                )}
               >
                 {msg.text}
 
-                {/* Status Ticks for WhatsApp messages */}
+                {/* Message delivery status icons */}
                 {!isCustomer && (
-                  <div className="flex justify-end mt-1 text-[10px] opacity-80 gap-1 items-center">
-                    <span>Sent</span>
-                    <CheckCheck size={12} className={isAI ? 'text-violet-600' : 'text-white'} />
+                  <div
+                    className={cn(
+                      'flex items-center justify-end gap-1 mt-1 text-[10px]',
+                      isAI ? 'text-violet-500' : 'text-violet-200'
+                    )}
+                  >
+                    <span>Delivered</span>
+                    <CheckCheck size={12} />
                   </div>
                 )}
               </div>
@@ -193,32 +286,30 @@ export function ChatArea({
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Suggested AI Replies (Quick Clicks) */}
+      {/* Suggested AI Replies Bar */}
       {conversation.suggestedReplies && conversation.suggestedReplies.length > 0 && (
-        <div className="px-4 py-2 bg-violet-50/70 border-t border-violet-100 flex flex-col gap-1.5">
-          <div className="flex items-center gap-1.5 text-[11px] font-bold text-violet-800">
+        <div className="px-4 py-2 bg-violet-50/50 border-t border-violet-100/60 flex items-center gap-2 overflow-x-auto no-scrollbar">
+          <div className="flex items-center gap-1 text-[11px] font-semibold text-violet-700 shrink-0">
             <Sparkles size={12} className="text-violet-600" />
-            <span>AI Suggested Next Responses ({conversation.aiConfidence}% confidence)</span>
+            <span>AI Suggestions:</span>
           </div>
-          <div className="flex flex-wrap gap-2">
-            {conversation.suggestedReplies.map((reply, idx) => (
-              <button
-                key={idx}
-                onClick={() => setInputText(reply)}
-                className="text-left text-xs bg-white hover:bg-violet-100/60 border border-violet-200/60 hover:border-violet-300 text-slate-700 hover:text-violet-950 px-2.5 py-1.5 rounded-xl transition-all shadow-xs"
-              >
-                "{reply.length > 70 ? reply.slice(0, 70) + '…' : reply}"
-              </button>
-            ))}
-          </div>
+          {conversation.suggestedReplies.map((reply, i) => (
+            <button
+              key={i}
+              onClick={() => handleInsertCanned(reply)}
+              className="text-[11px] bg-white hover:bg-violet-100/80 text-slate-700 hover:text-violet-900 border border-violet-200/70 rounded-full px-3 py-1 transition-all shrink-0 shadow-2xs font-medium cursor-pointer"
+            >
+              "{reply}"
+            </button>
+          ))}
         </div>
       )}
 
-      {/* Message Composer Area */}
-      <div className="p-3.5 bg-white border-t border-slate-200/80 shrink-0 relative">
-        {/* Emoji bar popover */}
+      {/* Composer Section */}
+      <div className="p-3 bg-white border-t border-slate-200/80 relative">
+        {/* Emoji picker simple flyout */}
         {showEmojiPicker && (
-          <div className="absolute bottom-20 left-4 bg-white p-2 rounded-2xl shadow-dropdown border border-slate-100 flex gap-1 z-30 animate-scale-in">
+          <div className="absolute bottom-full left-4 mb-2 bg-white rounded-xl shadow-dropdown border border-slate-200 p-2 flex gap-1 z-20 animate-scale-in">
             {emojis.map((emoji) => (
               <button
                 key={emoji}
@@ -226,7 +317,7 @@ export function ChatArea({
                   setInputText((prev) => prev + emoji)
                   setShowEmojiPicker(false)
                 }}
-                className="p-1.5 text-base hover:bg-violet-50 rounded-lg transition-colors"
+                className="w-8 h-8 flex items-center justify-center hover:bg-slate-100 rounded-lg text-base cursor-pointer"
               >
                 {emoji}
               </button>
@@ -242,7 +333,7 @@ export function ChatArea({
             placeholder={
               conversation.aiActive
                 ? 'Type your reply (typing will switch conversation to human takeover)...'
-                : 'Write your reply to Priya Sharma via WhatsApp Business API...'
+                : 'Write your reply via WhatsApp Business API...'
             }
             rows={2}
             className="w-full bg-transparent text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 outline-none resize-none"
@@ -252,7 +343,7 @@ export function ChatArea({
             <div className="flex items-center gap-1 text-slate-400">
               <button
                 onClick={() => setShowEmojiPicker((prev) => !prev)}
-                className="p-1.5 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
+                className="p-1.5 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
                 title="Add emoji"
               >
                 <Smile size={16} />
@@ -266,7 +357,7 @@ export function ChatArea({
                     description: 'WhatsApp Cloud API document & image attachment ready.',
                   })
                 }
-                className="p-1.5 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
+                className="p-1.5 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
                 title="Attach media or PDF"
               >
                 <Paperclip size={16} />

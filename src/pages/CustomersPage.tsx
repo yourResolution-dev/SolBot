@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useSearchParams, useNavigate } from 'react-router-dom'
 import {
   Users,
   Search,
@@ -22,7 +23,9 @@ import {
   CheckCircle,
   MessageSquare,
   Sparkles,
+  Copy,
 } from 'lucide-react'
+import { ActionMenu } from '@/components/ui/ActionMenu'
 import {
   initialContacts,
   initialSegments,
@@ -40,6 +43,8 @@ import { useToast } from '@/components/ui/Toast'
 
 export function CustomersPage() {
   const { toast } = useToast()
+  const [searchParams] = useSearchParams()
+  const navigate = useNavigate()
   const [contacts, setContacts] = useState<ContactRecord[]>(initialContacts)
   const [segments, setSegments] = useState<CustomerSegment[]>(initialSegments)
   const [activeSegment, setActiveSegment] = useState<CustomerSegmentKey>('all')
@@ -50,6 +55,21 @@ export function CustomersPage() {
 
   // Selected contact for detail profile drawer
   const [selectedContact, setSelectedContact] = useState<ContactRecord | null>(null)
+
+  // Listen for search params from Command Palette or Universal Search
+  useEffect(() => {
+    const contactParam = searchParams.get('contact')
+    if (contactParam) {
+      const match = contacts.find(
+        (c) =>
+          c.id.toLowerCase() === contactParam.toLowerCase() ||
+          c.name.toLowerCase().includes(contactParam.toLowerCase())
+      )
+      if (match) {
+        setSelectedContact(match)
+      }
+    }
+  }, [searchParams, contacts])
 
   // Modals state
   const [createContactModal, setCreateContactModal] = useState(false)
@@ -476,9 +496,53 @@ export function CustomersPage() {
                     >
                       View
                     </Button>
+                    <ActionMenu
+                      items={[
+                        {
+                          id: 'open-ticket',
+                          label: 'Message via WhatsApp',
+                          icon: <MessageSquare size={13} className="text-violet-600" />,
+                          onClick: () => {
+                            navigate('/tickets')
+                            toast({
+                              type: 'info',
+                              title: 'Navigated to Inbox',
+                              description: `Opening WhatsApp thread with ${contact.name}.`,
+                            })
+                          },
+                        },
+                        {
+                          id: 'copy-email',
+                          label: 'Copy Email Address',
+                          icon: <Mail size={13} className="text-slate-500" />,
+                          onClick: () => {
+                            navigator.clipboard?.writeText(contact.email)
+                            toast({
+                              type: 'info',
+                              title: 'Email Copied',
+                              description: `${contact.email} copied to clipboard.`,
+                            })
+                          },
+                        },
+                        {
+                          id: 'copy-phone',
+                          label: 'Copy Phone Number',
+                          icon: <Phone size={13} className="text-emerald-600" />,
+                          onClick: () => {
+                            navigator.clipboard?.writeText(contact.phone)
+                            toast({
+                              type: 'info',
+                              title: 'Phone Copied',
+                              description: `${contact.phone} copied to clipboard.`,
+                            })
+                          },
+                        },
+                      ]}
+                      buttonClassName="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors"
+                    />
                     <button
                       onClick={(e) => handleDeleteContact(contact.id, e)}
-                      className="p-1.5 text-slate-400 hover:text-red-600 rounded-lg transition-colors"
+                      className="p-1.5 text-slate-400 hover:text-red-600 rounded-lg transition-colors cursor-pointer"
                       title="Delete contact"
                     >
                       <Trash2 size={13} />

@@ -25,7 +25,10 @@ export function DashboardShell() {
           collapsed ? 'lg:ml-20' : 'lg:ml-64'
         )}
       >
-        <TopNavbar onOpenMobileSidebar={() => setMobileOpen(true)} />
+        <TopNavbar
+          onOpenMobileSidebar={() => setMobileOpen(true)}
+          onToggleSidebar={() => setCollapsed((prev) => !prev)}
+        />
 
         <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto animate-fade-in">
           <Outlet />

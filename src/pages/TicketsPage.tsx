@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import {
   LifeBuoy,
   Search,
@@ -22,6 +23,7 @@ import { useToast } from '@/components/ui/Toast'
 
 export function TicketsPage() {
   const { toast } = useToast()
+  const [searchParams] = useSearchParams()
   const [conversations, setConversations] = useState<Conversation[]>(initialConversations)
   const [selectedId, setSelectedId] = useState<string>(initialConversations[0].id)
   const [search, setSearch] = useState('')
@@ -29,8 +31,42 @@ export function TicketsPage() {
   const [priorityFilter, setPriorityFilter] = useState('all')
   const [showDetails, setShowDetails] = useState(true)
 
+  // Listen for search params from Command Palette or Notifications
+  useEffect(() => {
+    const ticketParam = searchParams.get('ticket')
+    if (ticketParam) {
+      const match = conversations.find(
+        (c) =>
+          c.id.toLowerCase() === ticketParam.toLowerCase() ||
+          c.ticketNumber.toLowerCase() === ticketParam.toLowerCase()
+      )
+      if (match) {
+        setSelectedId(match.id)
+      }
+    }
+  }, [searchParams, conversations])
+
   const selectedConversation =
     conversations.find((c) => c.id === selectedId) || conversations[0]
+
+  // Keyboard shortcut listeners for Tickets page
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.altKey && e.key.toLowerCase() === 'a') {
+        e.preventDefault()
+        handleToggleAI()
+      } else if (e.altKey && e.key.toLowerCase() === 'r') {
+        e.preventDefault()
+        handleResolve()
+      } else if (e.altKey && e.key.toLowerCase() === 'd') {
+        e.preventDefault()
+        setShowDetails((prev) => !prev)
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [selectedConversation])
 
   // Handler for sending a new message
   const handleSendMessage = (text: string) => {
@@ -65,7 +101,7 @@ export function TicketsPage() {
     })
   }
 
-  // Toggle AI Copilot vs Human Takeover
+  // Toggle AI Copilot vs Human Takeover for active conversation
   const handleToggleAI = () => {
     setConversations((prev) =>
       prev.map((c) => {
@@ -77,6 +113,24 @@ export function TicketsPage() {
             description: nextAI
               ? 'Resolution AI will auto-dispatch suggested replies.'
               : 'AI auto-responses paused for this conversation.',
+          })
+          return { ...c, aiActive: nextAI }
+        }
+        return c
+      })
+    )
+  }
+
+  // Contextual toggle for specific conversation card
+  const handleToggleAIForConv = (conv: Conversation) => {
+    setConversations((prev) =>
+      prev.map((c) => {
+        if (c.id === conv.id) {
+          const nextAI = !c.aiActive
+          toast({
+            type: nextAI ? 'info' : 'warning',
+            title: nextAI ? 'AI Copilot Resumed' : 'Human Agent Takeover',
+            description: `Updated for ${c.ticketNumber}.`,
           })
           return { ...c, aiActive: nextAI }
         }
@@ -99,6 +153,31 @@ export function TicketsPage() {
       type: 'success',
       title: 'Ticket Marked Resolved',
       description: `Customer survey dispatched to ${selectedConversation.customer.name}.`,
+    })
+  }
+
+  // Contextual resolve / reopen for specific conversation card
+  const handleResolveConv = (conv: Conversation) => {
+    const nextStatus = conv.status === 'resolved' ? ('open' as const) : ('resolved' as const)
+    setConversations((prev) =>
+      prev.map((c) => (c.id === conv.id ? { ...c, status: nextStatus } : c))
+    )
+    toast({
+      type: 'success',
+      title: nextStatus === 'resolved' ? 'Ticket Marked Resolved' : 'Ticket Reopened',
+      description: `Status updated for ${conv.ticketNumber}.`,
+    })
+  }
+
+  // Contextual mark unread
+  const handleMarkUnreadConv = (conv: Conversation) => {
+    setConversations((prev) =>
+      prev.map((c) => (c.id === conv.id ? { ...c, unreadCount: (c.unreadCount || 0) + 1 } : c))
+    )
+    toast({
+      type: 'info',
+      title: 'Marked as Unread',
+      description: `${conv.ticketNumber} marked with unread indicator.`,
     })
   }
 
@@ -159,6 +238,9 @@ export function TicketsPage() {
           onStatusFilterChange={setStatusFilter}
           priorityFilter={priorityFilter}
           onPriorityFilterChange={setPriorityFilter}
+          onToggleAIForConv={handleToggleAIForConv}
+          onResolveConv={handleResolveConv}
+          onMarkUnreadConv={handleMarkUnreadConv}
         />
 
         {/* Panel 2: Interactive Chat Area & Composer */}

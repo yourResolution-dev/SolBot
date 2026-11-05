@@ -97,7 +97,7 @@ export function AvatarGroup({ names, max = 3, size = 'sm' }: AvatarGroupProps) {
 
 type Channel = 'whatsapp' | 'email' | 'chat' | 'phone'
 
-function ChannelIcon({ channel }: { channel: Channel }) {
+function ChannelIcon({ channel, className }: { channel: Channel; className?: string }) {
   const iconMap: Record<Channel, ReactNode> = {
     whatsapp: (
       <svg viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5">
@@ -130,7 +130,7 @@ function ChannelIcon({ channel }: { channel: Channel }) {
   }
 
   return (
-    <span className={cn('inline-flex items-center justify-center w-6 h-6 rounded-lg', colorMap[channel])}>
+    <span className={cn('inline-flex items-center justify-center w-6 h-6 rounded-lg', colorMap[channel], className)}>
       {iconMap[channel]}
     </span>
   )

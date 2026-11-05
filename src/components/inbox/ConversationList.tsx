@@ -1,7 +1,9 @@
-import { Search, Filter, Sparkles, AlertCircle } from 'lucide-react'
+import { Search, Filter, Sparkles, AlertCircle, CheckCircle, Bot, Copy, Phone, Mail, MoreVertical } from 'lucide-react'
 import type { Conversation, ConversationStatus, ConversationPriority } from '@/lib/inboxData'
 import { ChannelIcon } from '@/components/ui/Avatar'
 import { PriorityBadge, TicketStatusBadge } from '@/components/ui/Badge'
+import { ActionMenu } from '@/components/ui/ActionMenu'
+import { useToast } from '@/components/ui/Toast'
 import { cn } from '@/lib/utils'
 
 interface ConversationListProps {
@@ -14,6 +16,9 @@ interface ConversationListProps {
   onStatusFilterChange: (val: string) => void
   priorityFilter: string
   onPriorityFilterChange: (val: string) => void
+  onToggleAIForConv?: (conv: Conversation) => void
+  onResolveConv?: (conv: Conversation) => void
+  onMarkUnreadConv?: (conv: Conversation) => void
 }
 
 export function ConversationList({
@@ -26,7 +31,12 @@ export function ConversationList({
   onStatusFilterChange,
   priorityFilter,
   onPriorityFilterChange,
+  onToggleAIForConv,
+  onResolveConv,
+  onMarkUnreadConv,
 }: ConversationListProps) {
+  const { toast } = useToast()
+
   const filtered = conversations.filter((c) => {
     const matchesSearch =
       c.customer.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -76,7 +86,7 @@ export function ConversationList({
               key={s}
               onClick={() => onStatusFilterChange(s)}
               className={cn(
-                'px-2.5 py-1 text-[11px] font-medium rounded-lg capitalize whitespace-nowrap transition-colors',
+                'px-2.5 py-1 text-[11px] font-medium rounded-lg capitalize whitespace-nowrap transition-colors cursor-pointer',
                 statusFilter === s
                   ? 'bg-violet-600 text-white font-semibold shadow-xs'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
@@ -121,7 +131,7 @@ export function ConversationList({
                     : 'hover:bg-slate-50/80 border-l-4 border-l-transparent'
                 )}
               >
-                {/* Header row: Customer name, channel, time, unread */}
+                {/* Header row: Customer name, channel, time, unread, contextual menu */}
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2 min-w-0">
                     <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-violet-600 to-indigo-500 text-white font-semibold flex items-center justify-center text-xs shrink-0 shadow-xs">
@@ -140,15 +150,72 @@ export function ConversationList({
                     </div>
                   </div>
 
-                  <div className="text-right shrink-0">
-                    <span className="text-[10px] text-slate-400 block font-medium">
-                      {conv.lastMessageTime}
-                    </span>
-                    {conv.unreadCount > 0 && (
-                      <span className="mt-0.5 inline-flex items-center justify-center w-4 h-4 text-[10px] font-bold text-white bg-violet-600 rounded-full shadow-xs">
-                        {conv.unreadCount}
+                  <div className="flex items-center gap-1 shrink-0">
+                    <div className="text-right">
+                      <span className="text-[10px] text-slate-400 block font-medium">
+                        {conv.lastMessageTime}
                       </span>
-                    )}
+                      {conv.unreadCount > 0 && (
+                        <span className="mt-0.5 inline-flex items-center justify-center w-4 h-4 text-[10px] font-bold text-white bg-violet-600 rounded-full shadow-xs">
+                          {conv.unreadCount}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Contextual Action Menu */}
+                    <div onClick={(e) => e.stopPropagation()}>
+                      <ActionMenu
+                        items={[
+                          {
+                            id: 'resolve',
+                            label: conv.status === 'resolved' ? 'Reopen Ticket' : 'Mark Resolved',
+                            icon: <CheckCircle size={14} className="text-emerald-600" />,
+                            shortcut: 'Alt+R',
+                            onClick: () => onResolveConv?.(conv),
+                          },
+                          {
+                            id: 'toggle-ai',
+                            label: conv.aiActive ? 'Pause AI Copilot' : 'Resume AI Copilot',
+                            icon: <Bot size={14} className="text-violet-600" />,
+                            shortcut: 'Alt+A',
+                            onClick: () => onToggleAIForConv?.(conv),
+                          },
+                          {
+                            id: 'copy-id',
+                            label: `Copy ${conv.ticketNumber}`,
+                            icon: <Copy size={14} className="text-slate-500" />,
+                            onClick: () => {
+                              navigator.clipboard?.writeText(conv.ticketNumber)
+                              toast({
+                                type: 'info',
+                                title: 'Copied',
+                                description: `${conv.ticketNumber} copied to clipboard.`,
+                              })
+                            },
+                          },
+                          {
+                            id: 'copy-phone',
+                            label: 'Copy Customer Phone',
+                            icon: <Phone size={14} className="text-slate-500" />,
+                            onClick: () => {
+                              navigator.clipboard?.writeText(conv.customer.phone)
+                              toast({
+                                type: 'info',
+                                title: 'Copied',
+                                description: `${conv.customer.phone} copied to clipboard.`,
+                              })
+                            },
+                          },
+                          {
+                            id: 'mark-unread',
+                            label: 'Mark as Unread',
+                            icon: <Mail size={14} className="text-blue-500" />,
+                            onClick: () => onMarkUnreadConv?.(conv),
+                          },
+                        ]}
+                        buttonClassName="opacity-0 group-hover:opacity-100 p-1 text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 rounded-md transition-opacity"
+                      />
+                    </div>
                   </div>
                 </div>
 
