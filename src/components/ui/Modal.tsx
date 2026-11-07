@@ -56,26 +56,30 @@ export function Modal({
       onClick={(e) => { if (e.target === overlayRef.current) onClose() }}
     >
       {/* Overlay */}
-      <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm animate-fade-in" />
+      <div className="absolute inset-0 bg-slate-900/40 dark:bg-slate-950/70 backdrop-blur-sm animate-fade-in" />
 
       {/* Panel */}
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={title}
         className={cn(
-          'relative z-10 w-full bg-white rounded-2xl shadow-modal animate-scale-in overflow-hidden',
+          'relative z-10 w-full bg-white dark:bg-slate-900 rounded-2xl shadow-modal border border-slate-200/90 dark:border-slate-800 animate-scale-in overflow-hidden',
           sizeMap[size],
           className,
         )}
       >
         {/* Header */}
         {(title || subtitle) && (
-          <div className="flex items-start justify-between gap-4 p-5 border-b border-slate-100">
+          <div className="flex items-start justify-between gap-4 p-5 border-b border-slate-100 dark:border-slate-800 bg-slate-50/40 dark:bg-slate-850/40">
             <div>
-              {title && <h2 className="font-semibold text-slate-900">{title}</h2>}
-              {subtitle && <p className="text-sm text-slate-500 mt-0.5">{subtitle}</p>}
+              {title && <h2 className="font-semibold text-slate-900 dark:text-slate-100">{title}</h2>}
+              {subtitle && <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">{subtitle}</p>}
             </div>
             <button
               onClick={onClose}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
+              className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+              aria-label="Close dialog"
             >
               <X size={16} />
             </button>
@@ -83,11 +87,11 @@ export function Modal({
         )}
 
         {/* Body */}
-        <div className="p-5">{children}</div>
+        <div className="p-5 text-slate-700 dark:text-slate-200">{children}</div>
 
         {/* Footer */}
         {footer && (
-          <div className="flex items-center justify-end gap-2 px-5 py-4 border-t border-slate-100 bg-slate-50/50">
+          <div className="flex items-center justify-end gap-2 px-5 py-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-850/50">
             {footer}
           </div>
         )}
@@ -135,7 +139,7 @@ export function ConfirmDialog({
         </>
       }
     >
-      <p className="text-sm text-slate-600 leading-relaxed">{description}</p>
+      <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">{description}</p>
     </Modal>
   )
 }

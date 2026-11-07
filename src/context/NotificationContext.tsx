@@ -14,6 +14,7 @@ interface NotificationContextType {
   filter: 'all' | 'unread'
   setFilter: (filter: 'all' | 'unread') => void
   markAsRead: (id: string) => void
+  toggleReadStatus: (id: string) => void
   markAllAsRead: () => void
   deleteNotification: (id: string) => void
   clearAll: () => void
@@ -63,6 +64,12 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
     )
   }, [])
 
+  const toggleReadStatus = useCallback((id: string) => {
+    setNotifications((prev) =>
+      prev.map((item) => (item.id === id ? { ...item, read: !item.read } : item))
+    )
+  }, [])
+
   const markAllAsRead = useCallback(() => {
     setNotifications((prev) => prev.map((item) => ({ ...item, read: true })))
     toast({
@@ -108,6 +115,7 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
         filter,
         setFilter,
         markAsRead,
+        toggleReadStatus,
         markAllAsRead,
         deleteNotification,
         clearAll,

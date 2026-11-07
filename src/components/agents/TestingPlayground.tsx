@@ -105,16 +105,16 @@ export function TestingPlayground({ agent, className }: TestingPlaygroundProps) 
   }
 
   return (
-    <div className={cn('flex flex-col h-full bg-slate-50/60 rounded-2xl border border-slate-200/80 overflow-hidden', className)}>
+    <div className={cn('flex flex-col h-full bg-slate-50/60 dark:bg-slate-950/60 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden', className)}>
       {/* Header */}
-      <div className="p-3.5 bg-white border-b border-slate-100 flex items-center justify-between">
+      <div className="p-3.5 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className={`w-7 h-7 rounded-lg bg-gradient-to-tr ${agent.avatarColor} text-white flex items-center justify-center`}>
+          <div className={`w-7 h-7 rounded-lg bg-gradient-to-tr ${agent.avatarColor} text-white flex items-center justify-center shadow-xs`}>
             <Bot size={15} />
           </div>
           <div>
-            <h4 className="text-xs font-bold text-slate-900">{agent.name} Playground</h4>
-            <p className="text-[10px] text-slate-400">
+            <h4 className="text-xs font-bold text-slate-900 dark:text-slate-100">{agent.name} Playground</h4>
+            <p className="text-[10px] text-slate-400 dark:text-slate-500">
               {agent.model} &bull; Temp: {agent.temperature} &bull; Tone: {agent.tone}
             </p>
           </div>
@@ -122,7 +122,7 @@ export function TestingPlayground({ agent, className }: TestingPlaygroundProps) 
 
         <button
           onClick={handleReset}
-          className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
+          className="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
           title="Reset conversation test session"
         >
           <RotateCcw size={14} />
@@ -142,15 +142,15 @@ export function TestingPlayground({ agent, className }: TestingPlaygroundProps) 
             <div
               className={cn('p-3 rounded-2xl text-xs leading-relaxed', {
                 'bg-violet-600 text-white rounded-tr-xs': m.sender === 'user',
-                'bg-white border border-slate-200 text-slate-800 rounded-tl-xs shadow-xs': m.sender === 'agent',
+                'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-100 rounded-tl-xs shadow-xs': m.sender === 'agent',
               })}
             >
               {m.text}
             </div>
 
             {m.sender === 'agent' && m.confidence && (
-              <div className="flex items-center gap-2 mt-1 px-1 text-[10px] text-slate-400">
-                <span className="text-emerald-600 font-semibold flex items-center gap-0.5">
+              <div className="flex items-center gap-2 mt-1 px-1 text-[10px] text-slate-400 dark:text-slate-500">
+                <span className="text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-0.5">
                   <CheckCircle2 size={10} /> {m.confidence}% confidence
                 </span>
                 <span>&bull;</span>
@@ -158,7 +158,7 @@ export function TestingPlayground({ agent, className }: TestingPlaygroundProps) 
                 {m.retrievedSources && m.retrievedSources.length > 0 && (
                   <>
                     <span>&bull;</span>
-                    <span className="truncate max-w-[140px] text-violet-600">
+                    <span className="truncate max-w-[140px] text-violet-600 dark:text-violet-400">
                       RAG: {m.retrievedSources[0]}
                     </span>
                   </>
@@ -169,7 +169,7 @@ export function TestingPlayground({ agent, className }: TestingPlaygroundProps) 
         ))}
 
         {isTyping && (
-          <div className="flex items-center gap-1.5 p-3 rounded-2xl bg-white border border-slate-200 w-24">
+          <div className="flex items-center gap-1.5 p-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 w-24">
             <span className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-bounce" />
             <span className="w-1.5 h-1.5 rounded-full bg-violet-500 animate-bounce [animation-delay:0.2s]" />
             <span className="w-1.5 h-1.5 rounded-full bg-violet-600 animate-bounce [animation-delay:0.4s]" />
@@ -179,15 +179,15 @@ export function TestingPlayground({ agent, className }: TestingPlaygroundProps) 
       </div>
 
       {/* Suggested Test Queries */}
-      <div className="p-2 bg-violet-50/60 border-t border-violet-100/60 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
-        <span className="text-[10px] font-bold text-violet-700 shrink-0">Sample prompts:</span>
+      <div className="p-2 bg-violet-50/60 dark:bg-violet-950/30 border-t border-violet-100/60 dark:border-violet-900/40 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+        <span className="text-[10px] font-bold text-violet-700 dark:text-violet-400 shrink-0">Sample prompts:</span>
         {['Track package #SC-99201', 'What is your refund policy?', 'Transfer to a human'].map((chip) => (
           <button
             key={chip}
             onClick={() => {
               setInput(chip)
             }}
-            className="text-[10px] bg-white border border-violet-200 text-violet-900 px-2 py-0.5 rounded-md shrink-0 hover:bg-violet-100 transition-colors"
+            className="text-[10px] bg-white dark:bg-slate-900 border border-violet-200 dark:border-violet-800 text-violet-900 dark:text-violet-300 px-2 py-0.5 rounded-md shrink-0 hover:bg-violet-100 dark:hover:bg-slate-800 transition-colors"
           >
             "{chip}"
           </button>
@@ -195,14 +195,14 @@ export function TestingPlayground({ agent, className }: TestingPlaygroundProps) 
       </div>
 
       {/* Input */}
-      <div className="p-3 bg-white border-t border-slate-200/80 flex items-center gap-2">
+      <div className="p-3 bg-white dark:bg-slate-900 border-t border-slate-200/80 dark:border-slate-800 flex items-center gap-2">
         <input
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleSend()}
           placeholder={`Test prompt ${agent.name}...`}
-          className="flex-1 text-xs bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-400"
+          className="flex-1 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-400"
         />
         <Button variant="primary" size="xs" onClick={handleSend} disabled={!input.trim() || isTyping}>
           <Send size={13} />

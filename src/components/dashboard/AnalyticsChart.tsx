@@ -22,26 +22,26 @@ export function AnalyticsChart({ data, className }: AnalyticsChartProps) {
           <button
             onClick={() => setActiveMetric('both')}
             className={cn(
-              'flex items-center gap-1.5 font-medium transition-colors',
-              activeMetric === 'both' ? 'text-violet-900 font-semibold' : 'text-slate-500 hover:text-slate-700'
+              'flex items-center gap-1.5 font-medium transition-colors cursor-pointer',
+              activeMetric === 'both' ? 'text-violet-900 dark:text-violet-300 font-semibold' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
             )}
           >
-            <span className="w-2.5 h-2.5 rounded-full bg-violet-600 ring-2 ring-violet-200" />
+            <span className="w-2.5 h-2.5 rounded-full bg-violet-600 ring-2 ring-violet-200 dark:ring-violet-900" />
             <span>AI Automated</span>
           </button>
           <button
             onClick={() => setActiveMetric('both')}
             className={cn(
-              'flex items-center gap-1.5 font-medium transition-colors',
-              activeMetric === 'both' ? 'text-slate-900 font-semibold' : 'text-slate-500 hover:text-slate-700'
+              'flex items-center gap-1.5 font-medium transition-colors cursor-pointer',
+              activeMetric === 'both' ? 'text-slate-900 dark:text-slate-200 font-semibold' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
             )}
           >
-            <span className="w-2.5 h-2.5 rounded-full bg-slate-300" />
+            <span className="w-2.5 h-2.5 rounded-full bg-slate-300 dark:bg-slate-600" />
             <span>Human Escalated</span>
           </button>
         </div>
 
-        <div className="text-[11px] text-slate-400">
+        <div className="text-[11px] text-slate-400 dark:text-slate-500">
           Hover over bars for exact resolution volume breakdown
         </div>
       </div>
@@ -50,10 +50,10 @@ export function AnalyticsChart({ data, className }: AnalyticsChartProps) {
       <div className="relative pt-6 pb-2">
         {/* Y Axis Gridlines */}
         <div className="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-40">
-          <div className="border-b border-dashed border-slate-200 w-full" />
-          <div className="border-b border-dashed border-slate-200 w-full" />
-          <div className="border-b border-dashed border-slate-200 w-full" />
-          <div className="border-b border-dashed border-slate-200 w-full" />
+          <div className="border-b border-dashed border-slate-200 dark:border-slate-800 w-full" />
+          <div className="border-b border-dashed border-slate-200 dark:border-slate-800 w-full" />
+          <div className="border-b border-dashed border-slate-200 dark:border-slate-800 w-full" />
+          <div className="border-b border-dashed border-slate-200 dark:border-slate-800 w-full" />
         </div>
 
         {/* Chart Bars */}
@@ -74,7 +74,7 @@ export function AnalyticsChart({ data, className }: AnalyticsChartProps) {
               >
                 {/* Tooltip on hover */}
                 {isHovered && (
-                  <div className="absolute -top-16 z-20 bg-slate-900 text-white text-[11px] py-1.5 px-2.5 rounded-xl shadow-dropdown whitespace-nowrap animate-slide-up pointer-events-none">
+                  <div className="absolute -top-16 z-20 bg-slate-900 dark:bg-slate-800 text-white text-[11px] py-1.5 px-2.5 rounded-xl shadow-dropdown whitespace-nowrap animate-slide-up pointer-events-none border border-slate-700">
                     <p className="font-semibold text-violet-300 mb-0.5">{item.label}</p>
                     <p className="text-slate-200">
                       Total: <span className="font-bold text-white">{item.total.toLocaleString()}</span>
@@ -99,7 +99,7 @@ export function AnalyticsChart({ data, className }: AnalyticsChartProps) {
                   {/* Human portion (Top) */}
                   {(activeMetric === 'both' || activeMetric === 'human') && (
                     <div
-                      className="w-full bg-slate-200 transition-all duration-300"
+                      className="w-full bg-slate-200 dark:bg-slate-700 transition-all duration-300"
                       style={{ height: `${humanHeight}%` }}
                     />
                   )}
@@ -116,7 +116,7 @@ export function AnalyticsChart({ data, className }: AnalyticsChartProps) {
                 <span
                   className={cn(
                     'text-[11px] font-medium mt-3 transition-colors',
-                    isHovered ? 'text-violet-900 font-bold' : 'text-slate-500'
+                    isHovered ? 'text-violet-900 dark:text-violet-300 font-bold' : 'text-slate-500 dark:text-slate-400'
                   )}
                 >
                   {item.label}

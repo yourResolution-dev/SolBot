@@ -76,21 +76,24 @@ function ToastItem({ toast: t, onDismiss }: { toast: Toast; onDismiss: () => voi
 
   return (
     <div
+      role="status"
+      aria-live="polite"
       className={cn(
-        'flex items-start gap-3 bg-white rounded-xl border border-slate-100 shadow-dropdown px-4 py-3.5 border-l-4 animate-slide-up',
+        'flex items-start gap-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 shadow-dropdown px-4 py-3.5 border-l-4 animate-slide-up text-left backdrop-blur-md',
         borderMap[t.type],
       )}
     >
       <div className="mt-0.5">{iconMap[t.type]}</div>
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-semibold text-slate-900 leading-tight">{t.title}</p>
+        <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 leading-tight">{t.title}</p>
         {t.description && (
-          <p className="text-xs text-slate-500 mt-0.5 leading-relaxed">{t.description}</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">{t.description}</p>
         )}
       </div>
       <button
         onClick={onDismiss}
-        className="shrink-0 p-0.5 rounded text-slate-400 hover:text-slate-600 transition-colors"
+        className="shrink-0 p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+        aria-label="Dismiss notification"
       >
         <X size={14} />
       </button>

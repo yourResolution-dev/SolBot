@@ -150,47 +150,47 @@ export function VisualWorkflowCanvas({
   }
 
   return (
-    <div className="flex flex-col h-[calc(100vh-6.5rem)] -m-4 sm:-m-6 lg:-m-8 bg-slate-100 overflow-hidden select-none">
+    <div className="flex flex-col h-[calc(100vh-6.5rem)] -m-4 sm:-m-6 lg:-m-8 bg-slate-100 dark:bg-slate-950 overflow-hidden select-none">
       {/* Canvas Top Bar */}
-      <div className="h-16 px-4 bg-white border-b border-slate-200/80 flex items-center justify-between gap-3 shrink-0 z-20">
+      <div className="min-h-16 py-2 px-4 bg-white dark:bg-slate-900 border-b border-slate-200/80 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3 shrink-0 z-20">
         <div className="flex items-center gap-3">
           <Button variant="secondary" size="xs" onClick={onClose}>
             &larr; Back to Flows
           </Button>
-          <div className="h-5 w-px bg-slate-200" />
+          <div className="h-5 w-px bg-slate-200 dark:bg-slate-700" />
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="text-sm font-bold text-slate-900">{workflow.name}</h2>
+              <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100">{workflow.name}</h2>
               <Badge variant={workflow.status === 'active' ? 'green' : 'slate'} dot>
                 {workflow.status}
               </Badge>
             </div>
-            <p className="text-[11px] text-slate-400">
+            <p className="text-[11px] text-slate-400 dark:text-slate-500">
               {nodes.length} nodes &bull; {connections.length} branches &bull; {workflow.channel} Cloud API
             </p>
           </div>
         </div>
 
         {/* Action Controls */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center flex-wrap gap-2">
           {/* Quick Node Add Dropdown */}
-          <div className="flex items-center gap-1 bg-slate-50 border border-slate-200 p-1 rounded-xl">
-            <span className="text-[11px] font-semibold text-slate-500 px-2">Add:</span>
+          <div className="flex items-center gap-1 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 p-1 rounded-xl">
+            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 px-2">Add:</span>
             <button
               onClick={() => handleAddNode('condition')}
-              className="px-2 py-1 text-xs font-medium text-slate-700 hover:bg-white rounded-lg transition-colors flex items-center gap-1"
+              className="px-2 py-1 text-xs font-medium text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-700/70 rounded-lg transition-colors flex items-center gap-1"
             >
               <GitBranch size={12} className="text-blue-500" /> Branch
             </button>
             <button
               onClick={() => handleAddNode('action')}
-              className="px-2 py-1 text-xs font-medium text-slate-700 hover:bg-white rounded-lg transition-colors flex items-center gap-1"
+              className="px-2 py-1 text-xs font-medium text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-700/70 rounded-lg transition-colors flex items-center gap-1"
             >
               <Send size={12} className="text-emerald-500" /> Action
             </button>
             <button
               onClick={() => handleAddNode('ai_agent')}
-              className="px-2 py-1 text-xs font-medium text-slate-700 hover:bg-white rounded-lg transition-colors flex items-center gap-1"
+              className="px-2 py-1 text-xs font-medium text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-700/70 rounded-lg transition-colors flex items-center gap-1"
             >
               <Bot size={12} className="text-violet-500" /> AI Step
             </button>
@@ -213,7 +213,7 @@ export function VisualWorkflowCanvas({
           ref={canvasRef}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
-          className="flex-1 relative overflow-hidden bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:20px_20px] bg-slate-50/70"
+          className="flex-1 relative overflow-hidden bg-slate-50/70 dark:bg-slate-950 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] dark:bg-[radial-gradient(#334155_1px,transparent_1px)] [background-size:20px_20px]"
         >
           {/* SVG Connection Lines */}
           <svg className="absolute inset-0 w-full h-full pointer-events-none z-0">
@@ -247,7 +247,7 @@ export function VisualWorkflowCanvas({
                   <path
                     d={d}
                     fill="none"
-                    stroke="#c4b5fd"
+                    stroke="#a78bfa"
                     strokeWidth="2.5"
                     strokeDasharray="4 4"
                     markerEnd="url(#arrowhead)"
@@ -256,11 +256,11 @@ export function VisualWorkflowCanvas({
                     <text
                       x={midX}
                       y={(fromY + toY) / 2 - 6}
-                      fill="#6d28d9"
+                      fill="#8b5cf6"
                       fontSize="10"
                       fontWeight="bold"
                       textAnchor="middle"
-                      className="bg-white"
+                      className="fill-violet-600 dark:fill-violet-400"
                     >
                       {conn.label}
                     </text>
@@ -281,34 +281,34 @@ export function VisualWorkflowCanvas({
                 onMouseDown={(e) => handleMouseDown(node.id, e)}
                 style={{ transform: `translate(${node.x}px, ${node.y}px)` }}
                 className={cn(
-                  'absolute w-56 rounded-2xl bg-white border p-3.5 shadow-sm transition-shadow duration-150 cursor-grab active:cursor-grabbing z-10',
+                  'absolute w-56 rounded-2xl bg-white dark:bg-slate-900 border p-3.5 shadow-sm transition-shadow duration-150 cursor-grab active:cursor-grabbing z-10',
                   isSelected
-                    ? 'border-violet-600 ring-2 ring-violet-500/20 shadow-md'
-                    : 'border-slate-200/90 hover:border-slate-300',
+                    ? 'border-violet-600 dark:border-violet-500 ring-2 ring-violet-500/20 shadow-md'
+                    : 'border-slate-200/90 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700',
                   isDragging && 'shadow-lg opacity-90'
                 )}
               >
                 <div className="flex items-center justify-between gap-2 mb-1.5">
                   <div className="flex items-center gap-1.5 min-w-0">
-                    <div className="p-1.5 rounded-lg bg-slate-50 border border-slate-100 shrink-0">
+                    <div className="p-1.5 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shrink-0">
                       {getNodeIcon(node.type)}
                     </div>
-                    <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400">
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">
                       {node.type}
                     </span>
                   </div>
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                 </div>
 
-                <h4 className="text-xs font-bold text-slate-900 truncate">{node.title}</h4>
-                <p className="text-[11px] text-slate-500 mt-0.5 line-clamp-2 leading-relaxed">
+                <h4 className="text-xs font-bold text-slate-900 dark:text-slate-100 truncate">{node.title}</h4>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-2 leading-relaxed">
                   {node.subtitle}
                 </p>
 
                 {/* Ports */}
-                <div className="flex items-center justify-between mt-3 pt-2 border-t border-slate-100 text-[10px] text-slate-400">
+                <div className="flex items-center justify-between mt-3 pt-2 border-t border-slate-100 dark:border-slate-800 text-[10px] text-slate-400 dark:text-slate-500">
                   <span className="flex items-center gap-1">
-                    <span className="w-2 h-2 rounded-full border border-violet-400 bg-white" /> In
+                    <span className="w-2 h-2 rounded-full border border-violet-400 bg-white dark:bg-slate-900" /> In
                   </span>
                   <span className="flex items-center gap-1">
                     Out <span className="w-2 h-2 rounded-full bg-violet-600" />
@@ -321,17 +321,17 @@ export function VisualWorkflowCanvas({
 
         {/* Right Node Configuration Inspector */}
         {selectedNode && (
-          <div className="w-80 bg-white border-l border-slate-200/80 p-4 space-y-4 overflow-y-auto shrink-0 z-20 animate-fade-in shadow-xs">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+          <div className="w-80 bg-white dark:bg-slate-900 border-l border-slate-200/80 dark:border-slate-800 p-4 space-y-4 overflow-y-auto shrink-0 z-20 animate-fade-in shadow-xs">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
               <div className="flex items-center gap-2">
-                <div className="p-1.5 rounded-lg bg-slate-50 border border-slate-100">
+                <div className="p-1.5 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700">
                   {getNodeIcon(selectedNode.type)}
                 </div>
                 <div>
-                  <h3 className="text-xs font-bold text-slate-900 capitalize">
+                  <h3 className="text-xs font-bold text-slate-900 dark:text-slate-100 capitalize">
                     {selectedNode.type} Settings
                   </h3>
-                  <span className="text-[10px] font-mono text-violet-600 font-semibold">
+                  <span className="text-[10px] font-mono text-violet-600 dark:text-violet-400 font-semibold">
                     {selectedNode.id}
                   </span>
                 </div>
@@ -339,7 +339,7 @@ export function VisualWorkflowCanvas({
 
               <button
                 onClick={() => handleDeleteNode(selectedNode.id)}
-                className="p-1 text-slate-400 hover:text-red-600 rounded-lg transition-colors"
+                className="p-1 text-slate-400 hover:text-red-600 dark:hover:text-red-400 rounded-lg transition-colors"
                 title="Delete node"
               >
                 <Trash2 size={14} />
@@ -349,7 +349,7 @@ export function VisualWorkflowCanvas({
             {/* Editable Fields */}
             <div className="space-y-3 text-xs">
               <div>
-                <label className="text-[11px] font-semibold text-slate-700 block mb-1">
+                <label className="text-[11px] font-semibold text-slate-700 dark:text-slate-300 block mb-1">
                   Node Title
                 </label>
                 <input
@@ -361,12 +361,12 @@ export function VisualWorkflowCanvas({
                       prev.map((n) => (n.id === selectedNode.id ? { ...n, title: next } : n))
                     )
                   }}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-xs text-slate-800 outline-none focus:ring-2 focus:ring-violet-500/20"
+                  className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs text-slate-800 dark:text-slate-100 outline-none focus:ring-2 focus:ring-violet-500/20"
                 />
               </div>
 
               <div>
-                <label className="text-[11px] font-semibold text-slate-700 block mb-1">
+                <label className="text-[11px] font-semibold text-slate-700 dark:text-slate-300 block mb-1">
                   Description / Subtitle
                 </label>
                 <textarea
@@ -378,14 +378,14 @@ export function VisualWorkflowCanvas({
                       prev.map((n) => (n.id === selectedNode.id ? { ...n, subtitle: next } : n))
                     )
                   }}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-xs text-slate-800 outline-none focus:ring-2 focus:ring-violet-500/20"
+                  className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs text-slate-800 dark:text-slate-100 outline-none focus:ring-2 focus:ring-violet-500/20"
                 />
               </div>
 
               {/* Conditional node fields */}
               {selectedNode.type === 'condition' && (
-                <div className="space-y-2 pt-2 border-t border-slate-100">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
+                <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 block">
                     Branch Condition
                   </span>
                   <select
@@ -400,7 +400,7 @@ export function VisualWorkflowCanvas({
                         )
                       )
                     }}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-2 py-1.5 text-xs"
+                    className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 rounded-xl px-2 py-1.5 text-xs outline-none focus:ring-2 focus:ring-violet-500/20"
                   >
                     <option value="contains">Contains phrase</option>
                     <option value="equals">Exact match</option>
@@ -420,15 +420,15 @@ export function VisualWorkflowCanvas({
                         )
                       )
                     }}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-xs"
+                    className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 rounded-xl px-3 py-1.5 text-xs outline-none focus:ring-2 focus:ring-violet-500/20"
                   />
                 </div>
               )}
 
               {/* Action node template editor */}
               {selectedNode.type === 'action' && (
-                <div className="space-y-2 pt-2 border-t border-slate-100">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
+                <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 block">
                     WhatsApp Message Template
                   </span>
                   <textarea
@@ -447,9 +447,9 @@ export function VisualWorkflowCanvas({
                         )
                       )
                     }}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs text-slate-800 outline-none leading-relaxed font-mono"
+                    className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100 outline-none leading-relaxed font-mono focus:ring-2 focus:ring-violet-500/20"
                   />
-                  <span className="text-[10px] text-slate-400 block">
+                  <span className="text-[10px] text-slate-400 dark:text-slate-500 block">
                     Available variables: {"{{first_name}}"}, {"{{order_id}}"}, {"{{tracking_url}}"}
                   </span>
                 </div>

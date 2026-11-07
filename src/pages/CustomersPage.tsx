@@ -271,12 +271,12 @@ export function CustomersPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Customer Directory</h1>
-            <span className="px-2.5 py-0.5 rounded-full bg-violet-100 text-violet-700 text-xs font-semibold">
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">Customer Directory</h1>
+            <span className="px-2.5 py-0.5 rounded-full bg-violet-100 dark:bg-violet-950/60 text-violet-700 dark:text-violet-300 text-xs font-semibold">
               {contacts.length} Profiles
             </span>
           </div>
-          <p className="text-xs sm:text-sm text-slate-500 mt-1">
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
             Omnichannel customer records, WhatsApp identity resolution, purchase history, and custom CRM attributes
           </p>
         </div>
@@ -321,16 +321,16 @@ export function CustomersPage() {
                 setActiveSegment(seg.id)
                 setPage(1)
               }}
-              className={`px-3 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap transition-all flex items-center gap-2 border ${
+              className={`px-3 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap transition-all flex items-center gap-2 border cursor-pointer ${
                 isActive
                   ? 'bg-violet-600 text-white font-semibold border-violet-600 shadow-xs'
-                  : 'bg-white text-slate-600 border-slate-200/80 hover:bg-slate-50 hover:border-slate-300'
+                  : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border-slate-200/80 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
               }`}
             >
               <span>{seg.name}</span>
               <span
                 className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
-                  isActive ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'
+                  isActive ? 'bg-white/20 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
                 }`}
               >
                 {seg.id === 'all'
@@ -347,16 +347,16 @@ export function CustomersPage() {
 
         <button
           onClick={() => setCreateSegmentModal(true)}
-          className="px-2.5 py-1.5 rounded-xl text-xs font-medium text-violet-700 bg-violet-50 hover:bg-violet-100 border border-violet-200/70 whitespace-nowrap flex items-center gap-1 transition-colors"
+          className="px-2.5 py-1.5 rounded-xl text-xs font-medium text-violet-700 dark:text-violet-300 bg-violet-50 dark:bg-violet-950/50 hover:bg-violet-100 dark:hover:bg-violet-950/80 border border-violet-200/70 dark:border-violet-900/60 whitespace-nowrap flex items-center gap-1 transition-colors cursor-pointer"
         >
           <Plus size={12} /> New Segment
         </button>
       </div>
 
       {/* Search and Filters Strip */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-white p-3.5 rounded-2xl border border-slate-100 shadow-sm">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-white dark:bg-slate-900 p-3.5 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm">
         <div className="w-full sm:w-80 relative">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
           <input
             type="text"
             value={search}
@@ -365,7 +365,7 @@ export function CustomersPage() {
               setPage(1)
             }}
             placeholder="Search by name, email, phone, company..."
-            className="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-400"
+            className="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-400"
           />
         </div>
 
@@ -376,7 +376,7 @@ export function CustomersPage() {
               setTierFilter(e.target.value)
               setPage(1)
             }}
-            className="text-xs bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-slate-700 outline-none"
+            className="text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-1.5 text-slate-700 dark:text-slate-300 outline-none cursor-pointer"
           >
             <option value="all">All Tiers</option>
             <option value="Enterprise">Enterprise Tier</option>
@@ -416,10 +416,10 @@ export function CustomersPage() {
                       {contact.avatarInitials}
                     </div>
                     <div className="min-w-0">
-                      <div className="font-bold text-slate-900 text-xs truncate group-hover:text-violet-900">
+                      <div className="font-bold text-slate-900 dark:text-slate-100 text-xs truncate group-hover:text-violet-900 dark:group-hover:text-violet-300">
                         {contact.name}
                       </div>
-                      <span className="font-mono text-[10px] text-slate-400 block">
+                      <span className="font-mono text-[10px] text-slate-400 dark:text-slate-500 block">
                         {contact.id}
                       </span>
                     </div>
@@ -428,11 +428,11 @@ export function CustomersPage() {
 
                 <TableCell>
                   <div className="text-xs space-y-0.5">
-                    <div className="font-medium text-emerald-700 flex items-center gap-1.5">
+                    <div className="font-medium text-emerald-700 dark:text-emerald-400 flex items-center gap-1.5">
                       <Phone size={11} className="text-emerald-500 shrink-0" />
                       <span>{contact.phone}</span>
                     </div>
-                    <div className="text-slate-400 flex items-center gap-1.5 text-[11px]">
+                    <div className="text-slate-400 dark:text-slate-500 flex items-center gap-1.5 text-[11px]">
                       <Mail size={11} className="text-slate-400 shrink-0" />
                       <span className="truncate max-w-[140px]">{contact.email}</span>
                     </div>
@@ -441,10 +441,10 @@ export function CustomersPage() {
 
                 <TableCell>
                   <div className="text-xs">
-                    <span className="font-semibold text-slate-800 block truncate">
+                    <span className="font-semibold text-slate-800 dark:text-slate-200 block truncate">
                       {contact.company}
                     </span>
-                    <span className="text-slate-400 text-[11px] flex items-center gap-1 mt-0.5">
+                    <span className="text-slate-400 dark:text-slate-500 text-[11px] flex items-center gap-1 mt-0.5">
                       <MapPin size={10} /> {contact.location}
                     </span>
                   </div>
@@ -466,22 +466,22 @@ export function CustomersPage() {
 
                 <TableCell>
                   <div className="text-xs">
-                    <span className="font-bold text-slate-900 block">{contact.lifetimeValue}</span>
-                    <span className="text-[10px] text-slate-400">
+                    <span className="font-bold text-slate-900 dark:text-slate-100 block">{contact.lifetimeValue}</span>
+                    <span className="text-[10px] text-slate-400 dark:text-slate-500">
                       {contact.ordersCount} orders placed
                     </span>
                   </div>
                 </TableCell>
 
                 <TableCell>
-                  <div className="flex items-center gap-1 text-xs font-bold text-amber-600">
+                  <div className="flex items-center gap-1 text-xs font-bold text-amber-600 dark:text-amber-400">
                     <Star size={12} className="fill-amber-400 text-amber-400" />
                     <span>{contact.satisfactionScore}</span>
                   </div>
                 </TableCell>
 
                 <TableCell>
-                  <div className="flex items-center gap-1.5 text-xs text-slate-500">
+                  <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400">
                     <ChannelIcon channel={contact.lastContactChannel} />
                     <span className="text-[11px]">{formatRelativeTime(contact.lastContactDate)}</span>
                   </div>
@@ -566,13 +566,13 @@ export function CustomersPage() {
       {selectedContact && (
         <div className="fixed inset-0 z-50 flex justify-end">
           <div
-            className="fixed inset-0 bg-slate-900/30 backdrop-blur-xs transition-opacity"
+            className="fixed inset-0 bg-slate-900/40 dark:bg-slate-950/70 backdrop-blur-xs transition-opacity"
             onClick={() => setSelectedContact(null)}
           />
 
-          <div className="relative w-full max-w-lg bg-white h-full shadow-2xl border-l border-slate-200 z-10 flex flex-col overflow-hidden animate-slide-down">
+          <div className="relative w-full max-w-lg bg-white dark:bg-slate-900 h-full shadow-2xl border-l border-slate-200 dark:border-slate-800 z-10 flex flex-col overflow-hidden animate-slide-down">
             {/* Drawer Top Header */}
-            <div className="p-5 border-b border-slate-100 flex items-start justify-between bg-gradient-to-r from-violet-50/60 to-indigo-50/40">
+            <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex items-start justify-between bg-gradient-to-r from-violet-50/60 to-indigo-50/40 dark:from-violet-950/40 dark:to-indigo-950/30">
               <div className="flex items-center gap-3">
                 <div
                   className={`w-14 h-14 rounded-2xl bg-gradient-to-tr ${selectedContact.avatarGradient} text-white font-bold flex items-center justify-center text-lg shadow-sm`}
@@ -581,12 +581,12 @@ export function CustomersPage() {
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <h3 className="text-base font-bold text-slate-900">{selectedContact.name}</h3>
+                    <h3 className="text-base font-bold text-slate-900 dark:text-slate-100">{selectedContact.name}</h3>
                     <Badge variant={selectedContact.tier === 'Enterprise' ? 'violet' : 'blue'}>
                       {selectedContact.tier}
                     </Badge>
                   </div>
-                  <p className="text-xs text-slate-500 mt-0.5">
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                     {selectedContact.company} &bull; Joined {selectedContact.joinedDate}
                   </p>
                 </div>
@@ -594,7 +594,7 @@ export function CustomersPage() {
 
               <button
                 onClick={() => setSelectedContact(null)}
-                className="p-1.5 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-100 transition-colors"
+                className="p-1.5 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
               >
                 <X size={18} />
               </button>
@@ -603,37 +603,37 @@ export function CustomersPage() {
             {/* Scrollable Content */}
             <div className="flex-1 overflow-y-auto p-5 space-y-6 text-xs">
               {/* Quick Contact & WhatsApp Box */}
-              <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
+              <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-850 border border-slate-100 dark:border-slate-800 space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-400">WhatsApp Phone:</span>
-                  <span className="font-bold text-emerald-700 flex items-center gap-1">
+                  <span className="text-slate-400 dark:text-slate-500">WhatsApp Phone:</span>
+                  <span className="font-bold text-emerald-700 dark:text-emerald-400 flex items-center gap-1">
                     <Phone size={12} className="text-emerald-500" /> {selectedContact.phone}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-400">Email Address:</span>
-                  <span className="font-medium text-slate-800">{selectedContact.email}</span>
+                  <span className="text-slate-400 dark:text-slate-500">Email Address:</span>
+                  <span className="font-medium text-slate-800 dark:text-slate-200">{selectedContact.email}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-400">Location:</span>
-                  <span className="text-slate-700">{selectedContact.location}</span>
+                  <span className="text-slate-400 dark:text-slate-500">Location:</span>
+                  <span className="text-slate-700 dark:text-slate-300">{selectedContact.location}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-400">Assigned Agent:</span>
-                  <span className="font-semibold text-violet-700">{selectedContact.assignedSpecialist}</span>
+                  <span className="text-slate-400 dark:text-slate-500">Assigned Agent:</span>
+                  <span className="font-semibold text-violet-700 dark:text-violet-400">{selectedContact.assignedSpecialist}</span>
                 </div>
               </div>
 
               {/* Tags */}
               <div>
-                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-2">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 block mb-2">
                   Tags & Customer Badges
                 </span>
                 <div className="flex flex-wrap gap-1.5">
                   {selectedContact.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="px-2 py-0.5 rounded-lg bg-violet-50 text-violet-700 border border-violet-100 font-medium text-[11px]"
+                      className="px-2 py-0.5 rounded-lg bg-violet-50 dark:bg-violet-950/60 text-violet-700 dark:text-violet-300 border border-violet-100 dark:border-violet-900/60 font-medium text-[11px]"
                     >
                       {tag}
                     </span>
@@ -644,14 +644,14 @@ export function CustomersPage() {
               {/* Custom CRM Fields */}
               {selectedContact.customFields.length > 0 && (
                 <div>
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-2">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 block mb-2">
                     Custom Enterprise Attributes
                   </span>
                   <div className="grid grid-cols-2 gap-2">
                     {selectedContact.customFields.map((field) => (
-                      <div key={field.key} className="p-2.5 rounded-xl bg-slate-50 border border-slate-100">
-                        <span className="text-[10px] text-slate-400 block">{field.label}</span>
-                        <span className="font-semibold text-slate-800 mt-0.5 block truncate">
+                      <div key={field.key} className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-850 border border-slate-100 dark:border-slate-800">
+                        <span className="text-[10px] text-slate-400 dark:text-slate-500 block">{field.label}</span>
+                        <span className="font-semibold text-slate-800 dark:text-slate-200 mt-0.5 block truncate">
                           {field.value}
                         </span>
                       </div>
@@ -662,18 +662,18 @@ export function CustomersPage() {
 
               {/* Interaction Timeline */}
               <div>
-                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-2">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 block mb-2">
                   Interaction Timeline & Activity
                 </span>
-                <div className="space-y-3 relative before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200">
+                <div className="space-y-3 relative before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200 dark:before:bg-slate-700">
                   {selectedContact.timeline.map((event) => (
                     <div key={event.id} className="relative pl-7">
-                      <div className="absolute left-1.5 top-1 w-3 h-3 rounded-full bg-violet-600 ring-4 ring-white" />
-                      <p className="font-semibold text-slate-900 text-xs">{event.title}</p>
-                      <p className="text-[11px] text-slate-500 mt-0.5 leading-relaxed">
+                      <div className="absolute left-1.5 top-1 w-3 h-3 rounded-full bg-violet-600 ring-4 ring-white dark:ring-slate-900" />
+                      <p className="font-semibold text-slate-900 dark:text-slate-100 text-xs">{event.title}</p>
+                      <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">
                         {event.description}
                       </p>
-                      <span className="text-[10px] text-slate-400 block mt-1">
+                      <span className="text-[10px] text-slate-400 dark:text-slate-500 block mt-1">
                         {event.timestamp} {event.author && `&bull; By ${event.author}`}
                       </span>
                     </div>
@@ -683,7 +683,7 @@ export function CustomersPage() {
 
               {/* Notes & Team Annotations */}
               <div>
-                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-2">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 block mb-2">
                   Private Support Notes
                 </span>
                 <form onSubmit={handleAddNoteToContact} className="space-y-2 mb-3">
@@ -692,7 +692,7 @@ export function CustomersPage() {
                     value={newNoteText}
                     onChange={(e) => setNewNoteText(e.target.value)}
                     placeholder="Log conversation memo or WhatsApp VIP instruction..."
-                    className="w-full text-xs p-2.5 rounded-xl border border-slate-200 outline-none focus:border-violet-400 bg-slate-50/50"
+                    className="w-full text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 outline-none focus:border-violet-400 bg-slate-50/50 dark:bg-slate-850/50 text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
                   />
                   <Button variant="secondary" size="xs" type="submit" className="w-full">
                     Log Private Note
@@ -701,7 +701,7 @@ export function CustomersPage() {
 
                 <div className="space-y-2">
                   {selectedContact.notes.map((note, idx) => (
-                    <div key={idx} className="p-2.5 rounded-xl bg-amber-50/70 border border-amber-200/60 text-slate-800 text-[11px] leading-relaxed">
+                    <div key={idx} className="p-2.5 rounded-xl bg-amber-50/70 dark:bg-amber-950/30 border border-amber-200/60 dark:border-amber-900/40 text-slate-800 dark:text-slate-200 text-[11px] leading-relaxed">
                       {note}
                     </div>
                   ))}

@@ -14,7 +14,7 @@ export function Label({ htmlFor, children, required, className }: LabelProps) {
   return (
     <label
       htmlFor={htmlFor}
-      className={cn('block text-sm font-medium text-slate-700 mb-1.5', className)}
+      className={cn('block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1.5', className)}
     >
       {children}
       {required && <span className="text-red-500 ml-0.5">*</span>}
@@ -26,7 +26,7 @@ export function Label({ htmlFor, children, required, className }: LabelProps) {
 
 export function HelperText({ children, error }: { children: ReactNode; error?: boolean }) {
   return (
-    <p className={cn('text-xs mt-1.5', error ? 'text-red-500' : 'text-slate-500')}>{children}</p>
+    <p className={cn('text-xs mt-1.5', error ? 'text-red-500' : 'text-slate-500 dark:text-slate-400')}>{children}</p>
   )
 }
 
@@ -131,10 +131,10 @@ export function Checkbox({ label, id, className, ...props }: CheckboxProps) {
       <input
         type="checkbox"
         id={id}
-        className="w-4 h-4 rounded border-slate-300 text-violet-600 focus:ring-violet-500/30 cursor-pointer"
+        className="w-4 h-4 rounded border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-violet-600 focus:ring-violet-500/30 cursor-pointer"
         {...props}
       />
-      {label && <span className="text-sm text-slate-700 group-hover:text-slate-900">{label}</span>}
+      {label && <span className="text-sm text-slate-700 dark:text-slate-300 group-hover:text-slate-900 dark:group-hover:text-slate-100">{label}</span>}
     </label>
   )
 }

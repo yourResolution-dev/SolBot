@@ -1,4 +1,4 @@
-import type { Conversation, ChatMessage, InternalNote, CustomerProfile } from './inboxData'
+import type { Conversation } from './inboxData'
 
 export interface WorkspaceProfile {
   companyName: string

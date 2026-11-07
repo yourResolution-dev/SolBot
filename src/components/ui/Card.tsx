@@ -49,8 +49,8 @@ export function CardHeader({ title, subtitle, action, className }: CardHeaderPro
   return (
     <div className={cn('flex items-start justify-between gap-4 mb-4', className)}>
       <div className="min-w-0">
-        <h3 className="font-semibold text-slate-900 text-sm leading-tight truncate">{title}</h3>
-        {subtitle && <p className="text-xs text-slate-500 mt-0.5">{subtitle}</p>}
+        <h3 className="font-semibold text-slate-900 dark:text-slate-100 text-sm leading-tight truncate">{title}</h3>
+        {subtitle && <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{subtitle}</p>}
       </div>
       {action && <div className="shrink-0">{action}</div>}
     </div>
@@ -58,5 +58,5 @@ export function CardHeader({ title, subtitle, action, className }: CardHeaderPro
 }
 
 export function CardDivider({ className }: { className?: string }) {
-  return <hr className={cn('border-slate-100 my-4', className)} />
+  return <hr className={cn('border-slate-100 dark:border-slate-800 my-4', className)} />
 }

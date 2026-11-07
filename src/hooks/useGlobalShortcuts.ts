@@ -6,6 +6,7 @@ interface UseGlobalShortcutsOptions {
   onOpenShortcutsCheatsheet: () => void
   onToggleNotifications: () => void
   onToggleSidebar?: () => void
+  onToggleTheme?: () => void
 }
 
 export function useGlobalShortcuts({
@@ -13,6 +14,7 @@ export function useGlobalShortcuts({
   onOpenShortcutsCheatsheet,
   onToggleNotifications,
   onToggleSidebar,
+  onToggleTheme,
 }: UseGlobalShortcutsOptions) {
   const navigate = useNavigate()
   const [chordPending, setChordPending] = useState<string | null>(null)
@@ -45,6 +47,13 @@ export function useGlobalShortcuts({
       if (e.altKey && e.key.toLowerCase() === 'b') {
         e.preventDefault()
         onToggleSidebar?.()
+        return
+      }
+
+      // Alt+T for theme toggle
+      if (e.altKey && e.key.toLowerCase() === 't') {
+        e.preventDefault()
+        onToggleTheme?.()
         return
       }
 
@@ -111,6 +120,7 @@ export function useGlobalShortcuts({
     onOpenShortcutsCheatsheet,
     onToggleNotifications,
     onToggleSidebar,
+    onToggleTheme,
   ])
 
   return { chordPending }

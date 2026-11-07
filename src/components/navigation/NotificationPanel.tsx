@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   Bell,
@@ -13,6 +13,7 @@ import {
   Check,
   Inbox,
   Settings,
+  Circle,
 } from 'lucide-react'
 import { useNotifications, type ExtendedNotification } from '@/context/NotificationContext'
 import { formatRelativeTime, cn } from '@/lib/utils'
@@ -29,14 +30,38 @@ export function NotificationPanel({ isOpen, onClose }: NotificationPanelProps) {
     filter,
     setFilter,
     markAsRead,
+    toggleReadStatus,
     markAllAsRead,
     deleteNotification,
     clearAll,
   } = useNotifications()
 
+  const [focusedIndex, setFocusedIndex] = useState(0)
   const panelRef = useRef<HTMLDivElement>(null)
+  const listRef = useRef<HTMLDivElement>(null)
   const navigate = useNavigate()
 
+  const filteredNotifications = notifications.filter((n) => {
+    if (filter === 'unread') return !n.read
+    return true
+  })
+
+  // Reset focused index when filter changes
+  useEffect(() => {
+    setFocusedIndex(0)
+  }, [filter])
+
+  // Scroll focused item into view
+  useEffect(() => {
+    if (listRef.current) {
+      const el = listRef.current.querySelector('[data-focused="true"]')
+      if (el) {
+        el.scrollIntoView({ block: 'nearest' })
+      }
+    }
+  }, [focusedIndex])
+
+  // Handle outside click & keyboard shortcuts
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (panelRef.current && !panelRef.current.contains(event.target as Node)) {
@@ -45,8 +70,41 @@ export function NotificationPanel({ isOpen, onClose }: NotificationPanelProps) {
     }
 
     function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === 'Escape' && isOpen) {
+      if (!isOpen) return
+
+      if (e.key === 'Escape') {
+        e.preventDefault()
         onClose()
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault()
+        setFocusedIndex((prev) =>
+          filteredNotifications.length === 0 ? 0 : (prev + 1) % filteredNotifications.length
+        )
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault()
+        setFocusedIndex((prev) =>
+          filteredNotifications.length === 0
+            ? 0
+            : (prev - 1 + filteredNotifications.length) % filteredNotifications.length
+        )
+      } else if (e.key === 'Enter') {
+        const item = filteredNotifications[focusedIndex]
+        if (item) {
+          e.preventDefault()
+          handleNotificationClick(item)
+        }
+      } else if (e.key === 'm' || e.key === 'M') {
+        const item = filteredNotifications[focusedIndex]
+        if (item) {
+          e.preventDefault()
+          toggleReadStatus(item.id)
+        }
+      } else if (e.key === 'Delete' || e.key === 'Backspace') {
+        const item = filteredNotifications[focusedIndex]
+        if (item) {
+          e.preventDefault()
+          deleteNotification(item.id)
+        }
       }
     }
 
@@ -58,14 +116,9 @@ export function NotificationPanel({ isOpen, onClose }: NotificationPanelProps) {
       document.removeEventListener('mousedown', handleClickOutside)
       document.removeEventListener('keydown', handleKeyDown)
     }
-  }, [isOpen, onClose])
+  }, [isOpen, onClose, filteredNotifications, focusedIndex, toggleReadStatus, deleteNotification])
 
   if (!isOpen) return null
-
-  const filteredNotifications = notifications.filter((n) => {
-    if (filter === 'unread') return !n.read
-    return true
-  })
 
   const handleNotificationClick = (item: ExtendedNotification) => {
     markAsRead(item.id)
@@ -93,15 +146,15 @@ export function NotificationPanel({ isOpen, onClose }: NotificationPanelProps) {
   const getBadgeBg = (type: ExtendedNotification['type']) => {
     switch (type) {
       case 'ticket':
-        return 'bg-violet-50 border-violet-100'
+        return 'bg-violet-50 dark:bg-violet-950/60 border-violet-100 dark:border-violet-900/60'
       case 'ai':
-        return 'bg-amber-50 border-amber-100'
+        return 'bg-amber-50 dark:bg-amber-950/60 border-amber-100 dark:border-amber-900/60'
       case 'system':
-        return 'bg-orange-50 border-orange-100'
+        return 'bg-orange-50 dark:bg-orange-950/60 border-orange-100 dark:border-orange-900/60'
       case 'billing':
-        return 'bg-blue-50 border-blue-100'
+        return 'bg-blue-50 dark:bg-blue-950/60 border-blue-100 dark:border-blue-900/60'
       default:
-        return 'bg-slate-50 border-slate-100'
+        return 'bg-slate-50 dark:bg-slate-800 border-slate-100 dark:border-slate-700'
     }
   }
 
@@ -110,18 +163,18 @@ export function NotificationPanel({ isOpen, onClose }: NotificationPanelProps) {
       ref={panelRef}
       role="dialog"
       aria-label="Notification Center"
-      className="absolute right-0 top-12 w-80 sm:w-96 bg-white/95 backdrop-blur-xl rounded-2xl shadow-dropdown border border-slate-200/90 overflow-hidden z-50 animate-scale-in"
+      className="absolute right-0 top-12 w-80 sm:w-96 bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl rounded-2xl shadow-modal border border-slate-200/90 dark:border-slate-800 overflow-hidden z-50 animate-scale-in"
     >
       {/* Header */}
-      <div className="p-3.5 border-b border-slate-100 bg-slate-50/70">
+      <div className="p-3.5 border-b border-slate-100 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-850/70">
         <div className="flex items-center justify-between mb-2.5">
           <div className="flex items-center gap-2">
-            <div className="p-1.5 rounded-lg bg-violet-100/70 text-violet-700">
+            <div className="p-1.5 rounded-lg bg-violet-100/70 dark:bg-violet-950/60 text-violet-700 dark:text-violet-300">
               <Bell size={16} />
             </div>
             <div>
-              <h4 className="text-sm font-bold text-slate-900 leading-tight">Notifications</h4>
-              <p className="text-[11px] text-slate-400">
+              <h4 className="text-sm font-bold text-slate-900 dark:text-slate-100 leading-tight">Notifications</h4>
+              <p className="text-[11px] text-slate-400 dark:text-slate-500">
                 {unreadCount > 0 ? `${unreadCount} unread alert${unreadCount > 1 ? 's' : ''}` : 'All caught up!'}
               </p>
             </div>
@@ -131,7 +184,7 @@ export function NotificationPanel({ isOpen, onClose }: NotificationPanelProps) {
             {unreadCount > 0 && (
               <button
                 onClick={markAllAsRead}
-                className="flex items-center gap-1 px-2 py-1 text-xs font-semibold text-violet-700 hover:text-violet-900 hover:bg-violet-100/60 rounded-lg transition-colors cursor-pointer"
+                className="flex items-center gap-1 px-2.5 py-1 text-xs font-semibold text-violet-700 dark:text-violet-300 hover:text-violet-900 dark:hover:text-violet-100 hover:bg-violet-100/60 dark:hover:bg-violet-950/60 rounded-lg transition-colors cursor-pointer"
                 title="Mark all notifications as read"
               >
                 <Check size={13} />
@@ -140,24 +193,25 @@ export function NotificationPanel({ isOpen, onClose }: NotificationPanelProps) {
             )}
             <button
               onClick={onClose}
-              className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-200/50 rounded-lg transition-colors cursor-pointer"
+              className="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-200/50 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
               title="Close panel (Esc)"
+              aria-label="Close notification panel"
             >
               <X className="w-4 h-4" />
             </button>
           </div>
         </div>
 
-        {/* Filter Pills */}
+        {/* Filter Tabs */}
         <div className="flex items-center justify-between pt-1">
-          <div className="flex items-center gap-1.5 bg-slate-200/60 p-0.5 rounded-lg">
+          <div className="flex items-center gap-1.5 bg-slate-200/60 dark:bg-slate-800 p-0.5 rounded-lg">
             <button
               onClick={() => setFilter('all')}
               className={cn(
                 'px-2.5 py-1 text-xs font-medium rounded-md transition-all cursor-pointer',
                 filter === 'all'
-                  ? 'bg-white text-slate-900 font-semibold shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-semibold shadow-xs'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
               )}
             >
               All ({notifications.length})
@@ -167,8 +221,8 @@ export function NotificationPanel({ isOpen, onClose }: NotificationPanelProps) {
               className={cn(
                 'px-2.5 py-1 text-xs font-medium rounded-md transition-all flex items-center gap-1.5 cursor-pointer',
                 filter === 'unread'
-                  ? 'bg-white text-slate-900 font-semibold shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-semibold shadow-xs'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
               )}
             >
               Unread
@@ -183,7 +237,7 @@ export function NotificationPanel({ isOpen, onClose }: NotificationPanelProps) {
           {notifications.length > 0 && (
             <button
               onClick={clearAll}
-              className="text-[11px] text-slate-400 hover:text-red-600 transition-colors flex items-center gap-1 cursor-pointer"
+              className="text-[11px] text-slate-400 hover:text-red-600 dark:hover:text-red-400 transition-colors flex items-center gap-1 cursor-pointer font-medium"
               title="Clear all notification history"
             >
               <Trash2 size={11} />
@@ -193,112 +247,140 @@ export function NotificationPanel({ isOpen, onClose }: NotificationPanelProps) {
         </div>
       </div>
 
-      {/* Notifications List */}
-      <div className="max-h-[380px] overflow-y-auto divide-y divide-slate-100">
+      {/* Notifications Scroll List */}
+      <div
+        ref={listRef}
+        role="list"
+        className="max-h-[380px] overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800"
+      >
         {filteredNotifications.length === 0 ? (
           <div className="py-12 px-6 text-center">
-            <div className="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto mb-3 text-slate-400">
+            <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto mb-3 text-slate-400">
               <Inbox size={22} />
             </div>
-            <p className="text-sm font-semibold text-slate-700">No notifications</p>
-            <p className="text-xs text-slate-400 mt-1 max-w-xs mx-auto">
+            <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">No notifications</p>
+            <p className="text-xs text-slate-400 dark:text-slate-500 mt-1 max-w-xs mx-auto">
               {filter === 'unread'
                 ? "You don't have any unread alerts right now."
                 : 'All notification feeds are clear.'}
             </p>
           </div>
         ) : (
-          filteredNotifications.map((item) => (
-            <div
-              key={item.id}
-              onClick={() => handleNotificationClick(item)}
-              className={cn(
-                'p-3.5 flex items-start gap-3 hover:bg-slate-50/90 transition-colors cursor-pointer group relative',
-                !item.read ? 'bg-violet-50/40' : 'bg-transparent'
-              )}
-            >
-              {/* Type Icon Badge */}
+          filteredNotifications.map((item, index) => {
+            const isFocused = index === focusedIndex
+
+            return (
               <div
+                key={item.id}
+                role="listitem"
+                data-focused={isFocused}
+                onClick={() => handleNotificationClick(item)}
+                onMouseEnter={() => setFocusedIndex(index)}
                 className={cn(
-                  'p-2 rounded-xl border shadow-xs shrink-0 mt-0.5',
-                  getBadgeBg(item.type)
+                  'p-3.5 flex items-start gap-3 transition-colors cursor-pointer group relative text-left',
+                  !item.read ? 'bg-violet-50/40 dark:bg-violet-950/20' : 'bg-transparent',
+                  isFocused ? 'bg-violet-50/70 dark:bg-violet-950/40 border-l-4 border-l-violet-600' : 'border-l-4 border-l-transparent'
                 )}
               >
-                {getIcon(item.type)}
-              </div>
-
-              {/* Notification Content */}
-              <div className="flex-1 min-w-0 pr-8">
-                <div className="flex items-center gap-1.5">
-                  <p
-                    className={cn(
-                      'text-xs truncate group-hover:text-violet-900 transition-colors',
-                      !item.read ? 'text-slate-900 font-bold' : 'text-slate-700 font-medium'
-                    )}
-                  >
-                    {item.title}
-                  </p>
-                </div>
-                <p className="text-[11px] text-slate-500 mt-0.5 line-clamp-2 leading-relaxed">
-                  {item.body}
-                </p>
-                <div className="flex items-center gap-2 mt-1.5 text-[10px] text-slate-400">
-                  <span className="font-medium">{formatRelativeTime(item.time)}</span>
-                  <span>&bull;</span>
-                  <span className="capitalize font-mono">{item.type}</span>
-                  {item.url && (
-                    <span className="text-violet-600 opacity-0 group-hover:opacity-100 flex items-center gap-0.5 transition-opacity font-medium">
-                      Open <ExternalLink size={10} />
-                    </span>
+                {/* Type Icon Badge */}
+                <div
+                  className={cn(
+                    'p-2 rounded-xl border shadow-xs shrink-0 mt-0.5',
+                    getBadgeBg(item.type)
                   )}
+                >
+                  {getIcon(item.type)}
                 </div>
-              </div>
 
-              {/* Action Buttons on right */}
-              <div className="absolute right-3 top-3.5 flex items-center gap-1">
-                {!item.read ? (
+                {/* Notification Content */}
+                <div className="flex-1 min-w-0 pr-12">
+                  <div className="flex items-center gap-1.5">
+                    <p
+                      className={cn(
+                        'text-xs truncate group-hover:text-violet-900 dark:group-hover:text-violet-300 transition-colors',
+                        !item.read ? 'text-slate-900 dark:text-slate-100 font-bold' : 'text-slate-700 dark:text-slate-300 font-medium'
+                      )}
+                    >
+                      {item.title}
+                    </p>
+                  </div>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-2 leading-relaxed">
+                    {item.body}
+                  </p>
+                  <div className="flex items-center gap-2 mt-1.5 text-[10px] text-slate-400 dark:text-slate-500">
+                    <span className="font-medium">{formatRelativeTime(item.time)}</span>
+                    <span>&bull;</span>
+                    <span className="capitalize font-mono">{item.type}</span>
+                    {item.url && (
+                      <span className="text-violet-600 dark:text-violet-400 opacity-0 group-hover:opacity-100 flex items-center gap-0.5 transition-opacity font-semibold">
+                        Open <ExternalLink size={10} />
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Action Controls on right */}
+                <div className="absolute right-3 top-3.5 flex items-center gap-1">
+                  {/* Toggle Read/Unread Status */}
                   <button
                     onClick={(e) => {
                       e.stopPropagation()
-                      markAsRead(item.id)
+                      toggleReadStatus(item.id)
                     }}
-                    className="p-1 rounded-md text-slate-400 hover:text-violet-700 hover:bg-violet-100/70 transition-colors"
-                    title="Mark as read"
+                    className="p-1 rounded-md text-slate-400 hover:text-violet-700 dark:hover:text-violet-300 hover:bg-violet-100/70 dark:hover:bg-violet-950/50 transition-colors cursor-pointer"
+                    title={item.read ? 'Mark as unread' : 'Mark as read'}
+                    aria-label={item.read ? 'Mark as unread' : 'Mark as read'}
                   >
-                    <span className="w-2 h-2 rounded-full bg-violet-600 block group-hover:hidden" />
-                    <Check size={14} className="hidden group-hover:block" />
+                    {!item.read ? (
+                      <span className="w-2.5 h-2.5 rounded-full bg-violet-600 block ring-2 ring-violet-200 dark:ring-violet-800" />
+                    ) : (
+                      <Circle size={13} className="text-slate-300 dark:text-slate-600 hover:text-violet-600 dark:hover:text-violet-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    )}
                   </button>
-                ) : (
+
+                  {/* Dismiss / Delete button */}
                   <button
                     onClick={(e) => {
                       e.stopPropagation()
                       deleteNotification(item.id)
                     }}
-                    className="p-1 rounded-md text-slate-300 hover:text-red-600 hover:bg-red-50 opacity-0 group-hover:opacity-100 transition-all"
-                    title="Dismiss"
+                    className="p-1 rounded-md text-slate-300 dark:text-slate-600 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 opacity-0 group-hover:opacity-100 transition-all cursor-pointer"
+                    title="Dismiss notification"
+                    aria-label="Dismiss notification"
                   >
                     <Trash2 size={13} />
                   </button>
-                )}
+                </div>
               </div>
-            </div>
-          ))
+            )
+          })
         )}
       </div>
 
-      {/* Footer */}
-      <div className="p-2.5 border-t border-slate-100 bg-slate-50/60 flex items-center justify-between text-xs text-slate-500">
+      {/* Footer bar with keyboard hints */}
+      <div className="p-2.5 border-t border-slate-100 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-850/70 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
         <button
           onClick={() => {
             navigate('/settings')
             onClose()
           }}
-          className="flex items-center gap-1.5 hover:text-slate-800 transition-colors font-medium px-2 py-1 rounded-lg hover:bg-slate-100 cursor-pointer text-xs"
+          className="flex items-center gap-1.5 hover:text-slate-800 dark:hover:text-slate-200 transition-colors font-medium px-2 py-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer text-xs"
         >
           <Settings size={13} />
           Notification Settings
         </button>
-        <span className="text-[11px] text-slate-400">Esc to close</span>
+
+        <div className="flex items-center gap-2 text-[10px] text-slate-400 dark:text-slate-500">
+          <span className="hidden sm:inline">
+            <kbd className="px-1 py-0.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded text-slate-600 dark:text-slate-300 font-mono">↑↓</kbd> Select
+          </span>
+          <span className="hidden sm:inline">
+            <kbd className="px-1 py-0.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded text-slate-600 dark:text-slate-300 font-mono">M</kbd> Read
+          </span>
+          <span>
+            <kbd className="px-1 py-0.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded text-slate-600 dark:text-slate-300 font-mono">Esc</kbd> Close
+          </span>
+        </div>
       </div>
     </div>
   )

@@ -10,6 +10,7 @@ import {
   Play,
   Pause,
   ChevronRight,
+  ChevronLeft,
   Info,
   Clock,
   Check,
@@ -37,6 +38,7 @@ interface ChatAreaProps {
   onToggleDetails: () => void
   showDetails: boolean
   onEscalatePriority?: () => void
+  onBackToList?: () => void
 }
 
 export function ChatArea({
@@ -48,6 +50,7 @@ export function ChatArea({
   onToggleDetails,
   showDetails,
   onEscalatePriority,
+  onBackToList,
 }: ChatAreaProps) {
   const { toast } = useToast()
   const [inputText, setInputText] = useState('')
@@ -111,25 +114,35 @@ export function ChatArea({
   }
 
   return (
-    <div className="flex-1 flex flex-col h-full bg-slate-50/50 min-w-0">
+    <div data-tour="ai-copilot" className="flex-1 flex flex-col h-full bg-slate-50/50 dark:bg-slate-950/50 min-w-0">
       {/* Top Header Bar */}
-      <div className="h-16 px-4 bg-white border-b border-slate-200/80 flex items-center justify-between gap-3 shrink-0">
-        <div className="flex items-center gap-3 min-w-0">
+      <div className="h-16 px-4 bg-white dark:bg-slate-900 border-b border-slate-200/80 dark:border-slate-800 flex items-center justify-between gap-3 shrink-0">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+          {onBackToList && (
+            <button
+              onClick={onBackToList}
+              className="md:hidden p-1.5 -ml-1 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors cursor-pointer"
+              title="Back to conversation list"
+              aria-label="Back to tickets list"
+            >
+              <ChevronLeft size={20} />
+            </button>
+          )}
           <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-violet-600 to-indigo-500 text-white font-semibold flex items-center justify-center text-xs shrink-0 shadow-xs">
             {conversation.customer.avatar}
           </div>
           <div className="min-w-0">
             <div className="flex items-center gap-2">
-              <h3 className="font-bold text-sm text-slate-900 truncate">
+              <h3 className="font-bold text-sm text-slate-900 dark:text-slate-100 truncate">
                 {conversation.customer.name}
               </h3>
               <ChannelIcon channel={conversation.channel} />
               <TicketStatusBadge status={conversation.status} />
               <PriorityBadge priority={conversation.priority} />
             </div>
-            <p className="text-xs text-slate-400 truncate">
+            <p className="text-xs text-slate-400 dark:text-slate-500 truncate">
               {conversation.customer.company} &bull; {conversation.ticketNumber} &bull;{' '}
-              <span className="text-violet-600 font-medium">{conversation.customer.phone}</span>
+              <span className="text-violet-600 dark:text-violet-400 font-medium">{conversation.customer.phone}</span>
             </p>
           </div>
         </div>
@@ -165,7 +178,7 @@ export function ChatArea({
             variant="ghost"
             size="xs"
             onClick={onToggleDetails}
-            className={showDetails ? 'bg-slate-100 text-slate-900' : ''}
+            className={showDetails ? 'bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100' : ''}
             title="Toggle customer details panel (Alt+D)"
           >
             <Info size={16} />
@@ -177,7 +190,7 @@ export function ChatArea({
               {
                 id: 'template-order',
                 label: 'Insert: Order Status Update',
-                icon: <FileText size={14} className="text-violet-600" />,
+                icon: <FileText size={14} className="text-violet-600 dark:text-violet-400" />,
                 onClick: () =>
                   handleInsertCanned(
                     `Hello ${conversation.customer.name}, your order has been verified and our fulfillment team is tracking dispatch.`
@@ -195,7 +208,7 @@ export function ChatArea({
               {
                 id: 'copy-link',
                 label: 'Copy Ticket Link',
-                icon: <Copy size={14} className="text-slate-500" />,
+                icon: <Copy size={14} className="text-slate-500 dark:text-slate-400" />,
                 onClick: () => {
                   navigator.clipboard?.writeText(window.location.href)
                   toast({
@@ -208,7 +221,7 @@ export function ChatArea({
               {
                 id: 'export-transcript',
                 label: 'Export Conversation File',
-                icon: <Download size={14} className="text-emerald-600" />,
+                icon: <Download size={14} className="text-emerald-600 dark:text-emerald-400" />,
                 onClick: handleExportTranscript,
               },
             ]}
@@ -226,7 +239,7 @@ export function ChatArea({
           if (isSystem) {
             return (
               <div key={msg.id} className="flex justify-center my-2">
-                <span className="text-[11px] font-medium text-slate-400 bg-slate-100/80 px-3 py-1 rounded-full border border-slate-200/50">
+                <span className="text-[11px] font-medium text-slate-400 dark:text-slate-500 bg-slate-100/80 dark:bg-slate-800/80 px-3 py-1 rounded-full border border-slate-200/50 dark:border-slate-700/50">
                   {msg.text}
                 </span>
               </div>
@@ -238,8 +251,8 @@ export function ChatArea({
               key={msg.id}
               className={cn('flex flex-col', isCustomer ? 'items-start' : 'items-end')}
             >
-              <div className="flex items-center gap-1.5 mb-1 px-1 text-[11px] text-slate-400">
-                <span className="font-semibold text-slate-600">
+              <div className="flex items-center gap-1.5 mb-1 px-1 text-[11px] text-slate-400 dark:text-slate-500">
+                <span className="font-semibold text-slate-600 dark:text-slate-300">
                   {isCustomer
                     ? conversation.customer.name
                     : isAI
@@ -249,7 +262,7 @@ export function ChatArea({
                 <span>&bull;</span>
                 <span>{msg.time}</span>
                 {isAI && (
-                  <span className="inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded-full bg-violet-100 text-violet-700 text-[9px] font-bold">
+                  <span className="inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded-full bg-violet-100 dark:bg-violet-950/60 text-violet-700 dark:text-violet-300 text-[9px] font-bold">
                     <Sparkles size={8} /> Auto-Reply
                   </span>
                 )}
@@ -259,9 +272,9 @@ export function ChatArea({
                 className={cn(
                   'max-w-md sm:max-w-lg rounded-2xl p-3.5 shadow-card text-xs sm:text-sm leading-relaxed whitespace-pre-wrap break-words',
                   isCustomer
-                    ? 'bg-white border border-slate-200/80 text-slate-800 rounded-tl-xs'
+                    ? 'bg-white dark:bg-slate-850 border border-slate-200/80 dark:border-slate-800 text-slate-800 dark:text-slate-200 rounded-tl-xs'
                     : isAI
-                    ? 'bg-violet-50/90 border border-violet-200/80 text-violet-950 rounded-tr-xs'
+                    ? 'bg-violet-50/90 dark:bg-violet-950/40 border border-violet-200/80 dark:border-violet-900/60 text-violet-950 dark:text-violet-200 rounded-tr-xs'
                     : 'bg-violet-600 text-white rounded-tr-xs'
                 )}
               >
@@ -272,7 +285,7 @@ export function ChatArea({
                   <div
                     className={cn(
                       'flex items-center justify-end gap-1 mt-1 text-[10px]',
-                      isAI ? 'text-violet-500' : 'text-violet-200'
+                      isAI ? 'text-violet-500 dark:text-violet-400' : 'text-violet-200'
                     )}
                   >
                     <span>Delivered</span>
@@ -288,16 +301,16 @@ export function ChatArea({
 
       {/* Suggested AI Replies Bar */}
       {conversation.suggestedReplies && conversation.suggestedReplies.length > 0 && (
-        <div className="px-4 py-2 bg-violet-50/50 border-t border-violet-100/60 flex items-center gap-2 overflow-x-auto no-scrollbar">
-          <div className="flex items-center gap-1 text-[11px] font-semibold text-violet-700 shrink-0">
-            <Sparkles size={12} className="text-violet-600" />
+        <div className="px-4 py-2 bg-violet-50/50 dark:bg-violet-950/30 border-t border-violet-100/60 dark:border-violet-900/40 flex items-center gap-2 overflow-x-auto no-scrollbar">
+          <div className="flex items-center gap-1 text-[11px] font-semibold text-violet-700 dark:text-violet-300 shrink-0">
+            <Sparkles size={12} className="text-violet-600 dark:text-violet-400" />
             <span>AI Suggestions:</span>
           </div>
           {conversation.suggestedReplies.map((reply, i) => (
             <button
               key={i}
               onClick={() => handleInsertCanned(reply)}
-              className="text-[11px] bg-white hover:bg-violet-100/80 text-slate-700 hover:text-violet-900 border border-violet-200/70 rounded-full px-3 py-1 transition-all shrink-0 shadow-2xs font-medium cursor-pointer"
+              className="text-[11px] bg-white dark:bg-slate-850 hover:bg-violet-100/80 dark:hover:bg-violet-950/60 text-slate-700 dark:text-slate-300 hover:text-violet-900 dark:hover:text-violet-200 border border-violet-200/70 dark:border-violet-900/60 rounded-full px-3 py-1 transition-all shrink-0 shadow-2xs font-medium cursor-pointer"
             >
               "{reply}"
             </button>
@@ -306,10 +319,10 @@ export function ChatArea({
       )}
 
       {/* Composer Section */}
-      <div className="p-3 bg-white border-t border-slate-200/80 relative">
+      <div className="p-3 bg-white dark:bg-slate-900 border-t border-slate-200/80 dark:border-slate-800 relative">
         {/* Emoji picker simple flyout */}
         {showEmojiPicker && (
-          <div className="absolute bottom-full left-4 mb-2 bg-white rounded-xl shadow-dropdown border border-slate-200 p-2 flex gap-1 z-20 animate-scale-in">
+          <div className="absolute bottom-full left-4 mb-2 bg-white dark:bg-slate-850 rounded-xl shadow-dropdown border border-slate-200 dark:border-slate-700 p-2 flex gap-1 z-20 animate-scale-in">
             {emojis.map((emoji) => (
               <button
                 key={emoji}
@@ -317,7 +330,7 @@ export function ChatArea({
                   setInputText((prev) => prev + emoji)
                   setShowEmojiPicker(false)
                 }}
-                className="w-8 h-8 flex items-center justify-center hover:bg-slate-100 rounded-lg text-base cursor-pointer"
+                className="w-8 h-8 flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-base cursor-pointer"
               >
                 {emoji}
               </button>
@@ -325,7 +338,7 @@ export function ChatArea({
           </div>
         )}
 
-        <div className="border border-slate-200 rounded-2xl p-2.5 focus-within:ring-2 focus-within:ring-violet-500/20 focus-within:border-violet-400 bg-slate-50/30 transition-all">
+        <div className="border border-slate-200 dark:border-slate-700 rounded-2xl p-2.5 focus-within:ring-2 focus-within:ring-violet-500/20 focus-within:border-violet-400 bg-slate-50/30 dark:bg-slate-850/40 transition-all">
           <textarea
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
@@ -336,14 +349,14 @@ export function ChatArea({
                 : 'Write your reply via WhatsApp Business API...'
             }
             rows={2}
-            className="w-full bg-transparent text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 outline-none resize-none"
+            className="w-full bg-transparent text-xs sm:text-sm text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 outline-none resize-none"
           />
 
-          <div className="flex items-center justify-between pt-2 border-t border-slate-100">
-            <div className="flex items-center gap-1 text-slate-400">
+          <div className="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800">
+            <div className="flex items-center gap-1 text-slate-400 dark:text-slate-500">
               <button
                 onClick={() => setShowEmojiPicker((prev) => !prev)}
-                className="p-1.5 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
+                className="p-1.5 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
                 title="Add emoji"
               >
                 <Smile size={16} />
@@ -357,13 +370,13 @@ export function ChatArea({
                     description: 'WhatsApp Cloud API document & image attachment ready.',
                   })
                 }
-                className="p-1.5 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
+                className="p-1.5 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
                 title="Attach media or PDF"
               >
                 <Paperclip size={16} />
               </button>
 
-              <span className="hidden sm:inline-block text-[10px] text-slate-400 ml-2">
+              <span className="hidden sm:inline-block text-[10px] text-slate-400 dark:text-slate-500 ml-2">
                 Press <strong>Enter</strong> to send &bull; <strong>Shift+Enter</strong> for new line
               </span>
             </div>

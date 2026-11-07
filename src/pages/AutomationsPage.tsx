@@ -174,14 +174,14 @@ export function AutomationsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
               WhatsApp Automations & Flows
             </h1>
-            <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-xs font-semibold">
+            <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200/60 dark:border-emerald-800/50 text-xs font-semibold">
               {workflows.filter((w) => w.status === 'active').length} Active
             </span>
           </div>
-          <p className="text-xs sm:text-sm text-slate-500 mt-1">
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
             Build conversational triggers, Shopify sync logic, cart reminders, and human takeover rules
           </p>
         </div>
@@ -197,15 +197,15 @@ export function AutomationsPage() {
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-white p-3.5 rounded-2xl border border-slate-100 shadow-sm">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-white dark:bg-slate-900 p-3.5 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-xs">
         <div className="w-full sm:w-72 relative">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search automation flows..."
-            className="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-400"
+            className="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-400 transition-colors"
           />
         </div>
 
@@ -213,7 +213,7 @@ export function AutomationsPage() {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="text-xs bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-slate-700 outline-none"
+            className="text-xs bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-1.5 text-slate-700 dark:text-slate-200 outline-none focus:ring-2 focus:ring-violet-500/20"
           >
             <option value="all">All Statuses</option>
             <option value="active">Active Only</option>
@@ -223,7 +223,7 @@ export function AutomationsPage() {
           <select
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
-            className="text-xs bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-slate-700 outline-none"
+            className="text-xs bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-1.5 text-slate-700 dark:text-slate-200 outline-none focus:ring-2 focus:ring-violet-500/20"
           >
             <option value="all">All Categories</option>
             <option value="ecommerce">E-Commerce</option>
@@ -239,34 +239,34 @@ export function AutomationsPage() {
           <Card
             key={wf.id}
             onClick={() => setActiveWorkflow(wf)}
-            className="p-5 flex flex-col justify-between hover:border-violet-300 hover:shadow-md transition-all cursor-pointer group"
+            className="p-5 flex flex-col justify-between hover:border-violet-300 dark:hover:border-violet-600/60 hover:shadow-md transition-all cursor-pointer group dark:bg-slate-900/90 dark:border-slate-800"
           >
             <div>
               <div className="flex items-center justify-between gap-2 mb-2">
                 <div className="flex items-center gap-2">
                   <ChannelIcon channel={wf.channel} />
-                  <span className="text-[11px] font-mono text-slate-400">{wf.id}</span>
+                  <span className="text-[11px] font-mono text-slate-400 dark:text-slate-500">{wf.id}</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <AutomationStatusBadge status={wf.status} />
                   <div className="flex items-center gap-1 opacity-80 group-hover:opacity-100">
                     <button
                       onClick={(e) => toggleStatus(wf.id, e)}
-                      className="p-1 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-100"
+                      className="p-1 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                       title={wf.status === 'active' ? 'Pause' : 'Activate'}
                     >
                       {wf.status === 'active' ? <Pause size={12} /> : <Play size={12} />}
                     </button>
                     <button
                       onClick={(e) => handleDuplicate(wf, e)}
-                      className="p-1 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-100"
+                      className="p-1 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                       title="Duplicate"
                     >
                       <Copy size={12} />
                     </button>
                     <button
                       onClick={(e) => handleDelete(wf.id, e)}
-                      className="p-1 text-slate-400 hover:text-red-600 rounded-lg hover:bg-red-50"
+                      className="p-1 text-slate-400 hover:text-red-600 dark:hover:text-red-400 rounded-lg hover:bg-red-50 dark:hover:bg-red-950/40 transition-colors"
                       title="Delete"
                     >
                       <Trash2 size={12} />
@@ -275,37 +275,37 @@ export function AutomationsPage() {
                 </div>
               </div>
 
-              <h3 className="font-bold text-sm text-slate-900 group-hover:text-violet-900 transition-colors">
+              <h3 className="font-bold text-sm text-slate-900 dark:text-slate-100 group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors">
                 {wf.name}
               </h3>
-              <p className="text-xs text-slate-500 mt-1 line-clamp-2 leading-relaxed">
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2 leading-relaxed">
                 {wf.description}
               </p>
 
               {/* Visual preview of nodes in workflow */}
-              <div className="mt-3.5 p-2.5 rounded-xl bg-slate-50 border border-slate-100 flex items-center gap-2 text-[11px] text-slate-600 overflow-x-auto no-scrollbar">
+              <div className="mt-3.5 p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 flex items-center gap-2 text-[11px] text-slate-600 dark:text-slate-300 overflow-x-auto no-scrollbar">
                 {wf.nodes.map((node, i) => (
                   <div key={node.id} className="flex items-center gap-1 shrink-0">
-                    <span className="font-semibold text-slate-800 bg-white px-2 py-0.5 rounded-md border border-slate-200">
+                    <span className="font-semibold text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-800 px-2 py-0.5 rounded-md border border-slate-200 dark:border-slate-700 shadow-2xs">
                       {node.title.split(' ')[0]}
                     </span>
                     {i < wf.nodes.length - 1 && (
-                      <ArrowRight size={10} className="text-violet-400" />
+                      <ArrowRight size={10} className="text-violet-400 dark:text-violet-500" />
                     )}
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+            <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs">
               <div className="flex items-center gap-3">
-                <span className="font-bold text-slate-800">
-                  {wf.executionsCount.toLocaleString()} <span className="font-normal text-slate-400">runs</span>
+                <span className="font-bold text-slate-800 dark:text-slate-200">
+                  {wf.executionsCount.toLocaleString()} <span className="font-normal text-slate-400 dark:text-slate-500">runs</span>
                 </span>
-                <span className="text-emerald-600 font-semibold">{wf.successRate}% success</span>
+                <span className="text-emerald-600 dark:text-emerald-400 font-semibold">{wf.successRate}% success</span>
               </div>
 
-              <span className="text-violet-600 font-semibold group-hover:translate-x-0.5 transition-transform flex items-center gap-1">
+              <span className="text-violet-600 dark:text-violet-400 font-semibold group-hover:translate-x-0.5 transition-transform flex items-center gap-1">
                 Open Canvas &rarr;
               </span>
             </div>
@@ -332,33 +332,33 @@ export function AutomationsPage() {
       >
         <form onSubmit={handleCreate} className="space-y-4">
           <div className="space-y-1">
-            <label className="text-xs font-semibold text-slate-700">Workflow Name</label>
+            <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Workflow Name</label>
             <input
               type="text"
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
               placeholder="e.g. VIP Order Status Dispatch"
-              className="input-base text-xs"
+              className="input-base text-xs dark:bg-slate-800 dark:border-slate-700 dark:text-slate-100"
             />
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs font-semibold text-slate-700">Description</label>
+            <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Description</label>
             <textarea
               rows={2}
               value={newDesc}
               onChange={(e) => setNewDesc(e.target.value)}
               placeholder="What does this flow trigger and resolve?"
-              className="input-base text-xs"
+              className="input-base text-xs dark:bg-slate-800 dark:border-slate-700 dark:text-slate-100"
             />
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs font-semibold text-slate-700">Category</label>
+            <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Category</label>
             <select
               value={newCategory}
               onChange={(e) => setNewCategory(e.target.value as any)}
-              className="input-base text-xs"
+              className="input-base text-xs dark:bg-slate-800 dark:border-slate-700 dark:text-slate-100"
             >
               <option value="ecommerce">E-Commerce & Orders</option>
               <option value="support">Customer Support & Triage</option>

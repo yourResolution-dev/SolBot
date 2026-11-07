@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import { Sidebar } from './Sidebar'
 import { TopNavbar } from './TopNavbar'
+import { OnboardingModal } from '@/components/onboarding/OnboardingModal'
+import { ProductTour } from '@/components/onboarding/ProductTour'
 import { cn } from '@/lib/utils'
 
 export function DashboardShell() {
@@ -9,7 +11,7 @@ export function DashboardShell() {
   const [mobileOpen, setMobileOpen] = useState(false)
 
   return (
-    <div className="min-h-screen bg-slate-50 flex">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex transition-colors duration-200">
       {/* Sidebar Navigation */}
       <Sidebar
         collapsed={collapsed}
@@ -34,6 +36,12 @@ export function DashboardShell() {
           <Outlet />
         </main>
       </div>
+
+      {/* First-time Onboarding Wizard Modal */}
+      <OnboardingModal />
+
+      {/* Interactive Product Tour */}
+      <ProductTour />
     </div>
   )
 }

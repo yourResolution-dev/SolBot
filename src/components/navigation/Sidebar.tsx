@@ -46,23 +46,24 @@ export function Sidebar({ collapsed, onToggle, isMobileOpen, onCloseMobile }: Si
 
       {/* Sidebar Container */}
       <aside
+        data-tour="sidebar"
         className={cn(
-          'fixed top-0 bottom-0 left-0 z-40 bg-white border-r border-slate-200/80 transition-all duration-300 ease-in-out flex flex-col',
+          'fixed top-0 bottom-0 left-0 z-40 bg-white dark:bg-slate-900 border-r border-slate-200/80 dark:border-slate-800 transition-all duration-300 ease-in-out flex flex-col',
           collapsed ? 'w-20' : 'w-64',
           // Mobile state
           isMobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         )}
       >
         {/* Brand Header */}
-        <div className="h-16 flex items-center justify-between px-4 border-b border-slate-100">
+        <div className="h-16 flex items-center justify-between px-4 border-b border-slate-100 dark:border-slate-800">
           <div className="flex items-center gap-3 overflow-hidden">
             <ResolutionLogo className="w-8 h-8 shrink-0" />
             {!collapsed && (
               <div className="flex flex-col">
-                <span className="font-bold text-slate-900 tracking-tight text-base leading-none">
+                <span className="font-bold text-slate-900 dark:text-slate-100 tracking-tight text-base leading-none">
                   ReSolution
                 </span>
-                <span className="text-[10px] uppercase font-semibold text-violet-600 tracking-wider mt-1">
+                <span className="text-[10px] uppercase font-semibold text-violet-600 dark:text-violet-400 tracking-wider mt-1">
                   Support AI & WA
                 </span>
               </div>
@@ -70,7 +71,7 @@ export function Sidebar({ collapsed, onToggle, isMobileOpen, onCloseMobile }: Si
           </div>
           <button
             onClick={onToggle}
-            className="hidden lg:flex p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
+            className="hidden lg:flex p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
           >
             {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
           </button>

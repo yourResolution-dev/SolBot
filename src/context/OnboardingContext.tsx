@@ -25,6 +25,9 @@ interface OnboardingContextType {
   resetOnboarding: () => void
   demoMode: boolean
   toggleDemoMode: () => void
+  loadDemoConversations: () => void
+  clearConversations: () => void
+  simulateIncomingMessage: () => void
   conversations: Conversation[]
   setConversations: React.Dispatch<React.SetStateAction<Conversation[]>>
   updateWorkspace: (profile: Partial<WorkspaceProfile>) => void
@@ -91,6 +94,83 @@ export function OnboardingProvider({ children }: { children: React.ReactNode }) 
       }
       return { ...prev, demoMode: nextMode }
     })
+  }
+
+  const loadDemoConversations = () => {
+    setConversations(realisticDemoConversations)
+    setState((prev) => ({ ...prev, demoMode: true }))
+  }
+
+  const clearConversations = () => {
+    setConversations([])
+    setState((prev) => ({ ...prev, demoMode: false }))
+  }
+
+  const simulateIncomingMessage = () => {
+    const randomTicketNum = `RES-${Math.floor(10000 + Math.random() * 90000)}`
+    const simulatedConv: Conversation = {
+      id: `conv-sim-${Date.now()}`,
+      ticketNumber: randomTicketNum,
+      customer: {
+        id: `cust-sim-${Date.now()}`,
+        name: 'Chiara Valenti',
+        email: 'chiara.valenti@venicearts.it',
+        phone: '+39 333 481 9920',
+        avatar: 'CV',
+        company: 'Valenti Studio',
+        tier: 'Growth',
+        location: 'Venice, Italy',
+        timezone: 'Europe/Rome (UTC+1)',
+        joinedDate: 'Today',
+        totalOrders: 1,
+        lifetimeValue: '€320.00',
+        tags: ['New Customer', 'WhatsApp Direct'],
+        orders: [
+          {
+            id: `ord-sim-1`,
+            orderNumber: 'IT-5501-V',
+            date: 'Today, 10:15',
+            total: '€320.00',
+            status: 'Processing',
+            items: 'Silk Scarf & Leather Portfolio × 1',
+          },
+        ],
+      },
+      channel: 'whatsapp',
+      subject: 'Inquiry regarding express delivery timeline to Venice Laguna',
+      status: 'open',
+      priority: 'high',
+      assignedTo: 'Resolution AI Copilot',
+      unreadCount: 1,
+      lastMessage: 'Customer: Hello! Can order IT-5501-V be delivered by water taxi courier by Friday?',
+      lastMessageTime: 'Just now',
+      aiActive: true,
+      aiConfidence: 93,
+      suggestedReplies: [
+        'Ciao Chiara! Yes, DHL Express water taxi delivery to Venice Laguna runs daily with guaranteed Friday 12:00 PM delivery.',
+        'Would you like me to add lagoon dock instructions for the boat courier?',
+        'Escalate to Italian regional logistics specialist for express confirmation.',
+      ],
+      messages: [
+        {
+          id: `msg-sim-1`,
+          sender: 'customer',
+          text: 'Hello! I placed order IT-5501-V this morning. Can it be delivered by water taxi courier to Venice Laguna before Friday evening?',
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          status: 'delivered',
+        },
+      ],
+      notes: [
+        {
+          id: `note-sim-1`,
+          author: 'Resolution AI Copilot',
+          text: 'New WhatsApp inbound message parsed via Meta Cloud API webhook. Venice Laguna water taxi SLA is 48 hours.',
+          time: 'Just now',
+        },
+      ],
+    }
+
+    setConversations((prev) => [simulatedConv, ...prev])
   }
 
   const openOnboardingModal = (step?: number) => {
@@ -280,6 +360,9 @@ export function OnboardingProvider({ children }: { children: React.ReactNode }) 
         resetOnboarding,
         demoMode: state.demoMode,
         toggleDemoMode,
+        loadDemoConversations,
+        clearConversations,
+        simulateIncomingMessage,
         conversations,
         setConversations,
         updateWorkspace,

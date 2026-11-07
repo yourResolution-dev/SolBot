@@ -51,17 +51,20 @@ export function ConversationList({
   })
 
   return (
-    <div className="w-full md:w-80 lg:w-96 border-r border-slate-200/80 bg-white flex flex-col h-full shrink-0">
+    <div
+      data-tour="tickets-queue"
+      className="w-full md:w-80 lg:w-96 border-r border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col h-full shrink-0"
+    >
       {/* Search Header */}
-      <div className="p-3.5 border-b border-slate-100 space-y-2.5">
+      <div className="p-3.5 border-b border-slate-100 dark:border-slate-800 space-y-2.5">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <h2 className="text-sm font-bold text-slate-900">Support Inbox</h2>
-            <span className="px-2 py-0.5 text-[10px] font-bold bg-violet-100 text-violet-700 rounded-full">
+            <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100">Support Inbox</h2>
+            <span className="px-2 py-0.5 text-[10px] font-bold bg-violet-100 dark:bg-violet-950/60 text-violet-700 dark:text-violet-300 rounded-full">
               {conversations.length} Active
             </span>
           </div>
-          <span className="text-[11px] font-medium text-emerald-600 flex items-center gap-1">
+          <span className="text-[11px] font-medium text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
             WhatsApp Live
           </span>
@@ -69,13 +72,13 @@ export function ConversationList({
 
         {/* Search bar */}
         <div className="relative">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
           <input
             type="text"
             value={search}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="Search tickets, customers, messages..."
-            className="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-400 transition-all"
+            className="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-400 transition-all"
           />
         </div>
 
@@ -89,17 +92,17 @@ export function ConversationList({
                 'px-2.5 py-1 text-[11px] font-medium rounded-lg capitalize whitespace-nowrap transition-colors cursor-pointer',
                 statusFilter === s
                   ? 'bg-violet-600 text-white font-semibold shadow-xs'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
               )}
             >
               {s}
             </button>
           ))}
-          <div className="h-4 w-px bg-slate-200 mx-1 shrink-0" />
+          <div className="h-4 w-px bg-slate-200 dark:bg-slate-700 mx-1 shrink-0" />
           <select
             value={priorityFilter}
             onChange={(e) => onPriorityFilterChange(e.target.value)}
-            className="text-[11px] bg-slate-50 border border-slate-200 rounded-lg px-2 py-1 text-slate-600 outline-none cursor-pointer"
+            className="text-[11px] bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1 text-slate-600 dark:text-slate-300 outline-none cursor-pointer"
           >
             <option value="all">Priority</option>
             <option value="urgent">Urgent</option>
@@ -111,9 +114,9 @@ export function ConversationList({
       </div>
 
       {/* Conversation Cards Scroll List */}
-      <div className="flex-1 overflow-y-auto divide-y divide-slate-100">
+      <div className="flex-1 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800">
         {filtered.length === 0 ? (
-          <div className="p-8 text-center text-xs text-slate-400">
+          <div className="p-8 text-center text-xs text-slate-400 dark:text-slate-500">
             No conversations match your filter criteria.
           </div>
         ) : (
@@ -127,8 +130,8 @@ export function ConversationList({
                 className={cn(
                   'p-3.5 transition-all cursor-pointer relative group flex flex-col gap-1.5',
                   isSelected
-                    ? 'bg-violet-50/70 border-l-4 border-l-violet-600'
-                    : 'hover:bg-slate-50/80 border-l-4 border-l-transparent'
+                    ? 'bg-violet-50/70 dark:bg-violet-950/30 border-l-4 border-l-violet-600'
+                    : 'hover:bg-slate-50/80 dark:hover:bg-slate-800/40 border-l-4 border-l-transparent'
                 )}
               >
                 {/* Header row: Customer name, channel, time, unread, contextual menu */}
@@ -139,12 +142,12 @@ export function ConversationList({
                     </div>
                     <div className="min-w-0">
                       <div className="flex items-center gap-1.5">
-                        <span className="font-semibold text-xs text-slate-900 truncate">
+                        <span className="font-semibold text-xs text-slate-900 dark:text-slate-100 truncate">
                           {conv.customer.name}
                         </span>
                         <ChannelIcon channel={conv.channel} />
                       </div>
-                      <span className="text-[10px] font-mono text-violet-600 font-medium">
+                      <span className="text-[10px] font-mono text-violet-600 dark:text-violet-400 font-medium">
                         {conv.ticketNumber}
                       </span>
                     </div>
@@ -152,7 +155,7 @@ export function ConversationList({
 
                   <div className="flex items-center gap-1 shrink-0">
                     <div className="text-right">
-                      <span className="text-[10px] text-slate-400 block font-medium">
+                      <span className="text-[10px] text-slate-400 dark:text-slate-500 block font-medium">
                         {conv.lastMessageTime}
                       </span>
                       {conv.unreadCount > 0 && (
@@ -169,21 +172,21 @@ export function ConversationList({
                           {
                             id: 'resolve',
                             label: conv.status === 'resolved' ? 'Reopen Ticket' : 'Mark Resolved',
-                            icon: <CheckCircle size={14} className="text-emerald-600" />,
+                            icon: <CheckCircle size={14} className="text-emerald-600 dark:text-emerald-400" />,
                             shortcut: 'Alt+R',
                             onClick: () => onResolveConv?.(conv),
                           },
                           {
                             id: 'toggle-ai',
                             label: conv.aiActive ? 'Pause AI Copilot' : 'Resume AI Copilot',
-                            icon: <Bot size={14} className="text-violet-600" />,
+                            icon: <Bot size={14} className="text-violet-600 dark:text-violet-400" />,
                             shortcut: 'Alt+A',
                             onClick: () => onToggleAIForConv?.(conv),
                           },
                           {
                             id: 'copy-id',
                             label: `Copy ${conv.ticketNumber}`,
-                            icon: <Copy size={14} className="text-slate-500" />,
+                            icon: <Copy size={14} className="text-slate-500 dark:text-slate-400" />,
                             onClick: () => {
                               navigator.clipboard?.writeText(conv.ticketNumber)
                               toast({
@@ -196,7 +199,7 @@ export function ConversationList({
                           {
                             id: 'copy-phone',
                             label: 'Copy Customer Phone',
-                            icon: <Phone size={14} className="text-slate-500" />,
+                            icon: <Phone size={14} className="text-slate-500 dark:text-slate-400" />,
                             onClick: () => {
                               navigator.clipboard?.writeText(conv.customer.phone)
                               toast({
@@ -209,11 +212,11 @@ export function ConversationList({
                           {
                             id: 'mark-unread',
                             label: 'Mark as Unread',
-                            icon: <Mail size={14} className="text-blue-500" />,
+                            icon: <Mail size={14} className="text-blue-500 dark:text-blue-400" />,
                             onClick: () => onMarkUnreadConv?.(conv),
                           },
                         ]}
-                        buttonClassName="opacity-0 group-hover:opacity-100 p-1 text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 rounded-md transition-opacity"
+                        buttonClassName="opacity-0 group-hover:opacity-100 p-1 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-800 rounded-md transition-opacity"
                       />
                     </div>
                   </div>
@@ -221,10 +224,10 @@ export function ConversationList({
 
                 {/* Subject & Last message snippet */}
                 <div className="mt-0.5">
-                  <p className="text-xs font-medium text-slate-800 truncate leading-snug">
+                  <p className="text-xs font-medium text-slate-800 dark:text-slate-200 truncate leading-snug">
                     {conv.subject}
                   </p>
-                  <p className="text-[11px] text-slate-500 truncate mt-0.5">
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
                     {conv.lastMessage}
                   </p>
                 </div>
@@ -233,18 +236,18 @@ export function ConversationList({
                 <div className="flex items-center justify-between gap-2 pt-1 mt-0.5 text-[10px]">
                   <div className="flex items-center gap-1.5">
                     {conv.aiActive ? (
-                      <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-emerald-50 text-emerald-700 font-semibold border border-emerald-200/60">
+                      <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 font-semibold border border-emerald-200/60 dark:border-emerald-800/60">
                         <Sparkles size={10} className="text-emerald-500" /> AI Active
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-amber-50 text-amber-700 font-semibold border border-amber-200/60">
+                      <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 font-semibold border border-amber-200/60 dark:border-amber-800/60">
                         Human Takeover
                       </span>
                     )}
                     <PriorityBadge priority={conv.priority} />
                   </div>
 
-                  <span className="text-slate-400 truncate max-w-[100px]">
+                  <span className="text-slate-400 dark:text-slate-500 truncate max-w-[100px]">
                     {conv.assignedTo}
                   </span>
                 </div>

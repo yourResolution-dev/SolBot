@@ -78,14 +78,14 @@ export function DashboardOverview() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
               Executive Overview
             </h1>
-            <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-violet-100 text-violet-700 text-xs font-semibold">
-              <Sparkles size={12} className="text-violet-600 animate-spin-slow" /> Live AI Engine
+            <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-violet-100 dark:bg-violet-950/60 text-violet-700 dark:text-violet-300 text-xs font-semibold">
+              <Sparkles size={12} className="text-violet-600 dark:text-violet-400 animate-spin-slow" /> Live AI Engine
             </span>
           </div>
-          <p className="text-xs sm:text-sm text-slate-500 mt-1">
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
             Real-time analytics across WhatsApp Cloud API, AI Copilot resolutions, and support operations
           </p>
         </div>
@@ -93,7 +93,7 @@ export function DashboardOverview() {
         {/* Date Filter & Actions */}
         <div className="flex flex-wrap items-center gap-2.5">
           {/* Interactive Date Filter Selector */}
-          <div className="flex items-center bg-white border border-slate-200/80 rounded-xl p-1 shadow-xs">
+          <div className="flex items-center bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-xl p-1 shadow-xs">
             {datePresets.map((preset) => (
               <button
                 key={preset.key}
@@ -105,10 +105,10 @@ export function DashboardOverview() {
                     description: `Data range updated to ${preset.label.toLowerCase()}.`,
                   })
                 }}
-                className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-all duration-200 ${
+                className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-all duration-200 cursor-pointer ${
                   selectedRange === preset.key
                     ? 'bg-violet-600 text-white shadow-xs font-semibold'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800'
                 }`}
               >
                 {preset.label}
@@ -192,26 +192,26 @@ export function DashboardOverview() {
         <Card
           hover
           onClick={() => navigate('/tickets')}
-          className="p-5 flex flex-col justify-between hover:border-violet-300 hover:shadow-md transition-all group"
+          className="p-5 flex flex-col justify-between hover:border-violet-300 dark:hover:border-violet-700 hover:shadow-md transition-all group"
         >
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
               Total Conversations
             </span>
-            <span className="p-2 rounded-xl bg-violet-50 text-violet-600 group-hover:bg-violet-600 group-hover:text-white transition-colors">
+            <span className="p-2 rounded-xl bg-violet-50 dark:bg-violet-950/60 text-violet-600 dark:text-violet-400 group-hover:bg-violet-600 group-hover:text-white transition-colors">
               <MessageSquare size={16} />
             </span>
           </div>
           <div className="my-2.5">
-            <div className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+            <div className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
               {currentAnalytics.summary.totalConversations.toLocaleString()}
             </div>
           </div>
-          <div className="flex items-center justify-between text-xs pt-2 border-t border-slate-100">
-            <span className="text-emerald-600 font-semibold flex items-center gap-0.5">
+          <div className="flex items-center justify-between text-xs pt-2 border-t border-slate-100 dark:border-slate-800">
+            <span className="text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-0.5">
               +{currentAnalytics.summary.totalChange}%
             </span>
-            <span className="text-slate-400 text-[11px]">{currentPreset.periodLabel}</span>
+            <span className="text-slate-400 dark:text-slate-500 text-[11px]">{currentPreset.periodLabel}</span>
           </div>
         </Card>
 
@@ -219,26 +219,26 @@ export function DashboardOverview() {
         <Card
           hover
           onClick={() => navigate('/ai')}
-          className="p-5 flex flex-col justify-between hover:border-emerald-300 hover:shadow-md transition-all group"
+          className="p-5 flex flex-col justify-between hover:border-emerald-300 dark:hover:border-emerald-700 hover:shadow-md transition-all group"
         >
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
               AI Resolution Rate
             </span>
-            <span className="p-2 rounded-xl bg-emerald-50 text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+            <span className="p-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
               <Bot size={16} />
             </span>
           </div>
           <div className="my-2.5">
-            <div className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight text-emerald-700">
+            <div className="text-2xl sm:text-3xl font-bold text-emerald-700 dark:text-emerald-400 tracking-tight">
               {currentAnalytics.summary.aiResolutionRate}%
             </div>
           </div>
-          <div className="flex items-center justify-between text-xs pt-2 border-t border-slate-100">
-            <span className="text-emerald-600 font-semibold flex items-center gap-0.5">
+          <div className="flex items-center justify-between text-xs pt-2 border-t border-slate-100 dark:border-slate-800">
+            <span className="text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-0.5">
               +{currentAnalytics.summary.aiRateChange}%
             </span>
-            <span className="text-slate-400 text-[11px]">{currentPreset.periodLabel}</span>
+            <span className="text-slate-400 dark:text-slate-500 text-[11px]">{currentPreset.periodLabel}</span>
           </div>
         </Card>
 
@@ -246,26 +246,26 @@ export function DashboardOverview() {
         <Card
           hover
           onClick={() => navigate('/reports')}
-          className="p-5 flex flex-col justify-between hover:border-blue-300 hover:shadow-md transition-all group"
+          className="p-5 flex flex-col justify-between hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-md transition-all group"
         >
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
               Avg Response Time
             </span>
-            <span className="p-2 rounded-xl bg-blue-50 text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+            <span className="p-2 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 group-hover:bg-blue-600 group-hover:text-white transition-colors">
               <Clock size={16} />
             </span>
           </div>
           <div className="my-2.5">
-            <div className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+            <div className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
               {currentAnalytics.summary.avgResponseTime}
             </div>
           </div>
-          <div className="flex items-center justify-between text-xs pt-2 border-t border-slate-100">
-            <span className="text-emerald-600 font-semibold flex items-center gap-0.5">
+          <div className="flex items-center justify-between text-xs pt-2 border-t border-slate-100 dark:border-slate-800">
+            <span className="text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-0.5">
               {currentAnalytics.summary.avgResponseChange}% faster
             </span>
-            <span className="text-slate-400 text-[11px]">{currentPreset.periodLabel}</span>
+            <span className="text-slate-400 dark:text-slate-500 text-[11px]">{currentPreset.periodLabel}</span>
           </div>
         </Card>
 
@@ -273,27 +273,27 @@ export function DashboardOverview() {
         <Card
           hover
           onClick={() => navigate('/customers')}
-          className="p-5 flex flex-col justify-between hover:border-amber-300 hover:shadow-md transition-all group"
+          className="p-5 flex flex-col justify-between hover:border-amber-300 dark:hover:border-amber-700 hover:shadow-md transition-all group"
         >
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
               Customer CSAT
             </span>
-            <span className="p-2 rounded-xl bg-amber-50 text-amber-600 group-hover:bg-amber-600 group-hover:text-white transition-colors">
+            <span className="p-2 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 group-hover:bg-amber-600 group-hover:text-white transition-colors">
               <Star size={16} />
             </span>
           </div>
           <div className="my-2.5">
-            <div className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight flex items-baseline gap-1">
+            <div className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-slate-100 tracking-tight flex items-baseline gap-1">
               <span>{currentAnalytics.summary.csatScore}</span>
-              <span className="text-slate-400 text-sm font-normal">/ 5.0</span>
+              <span className="text-slate-400 dark:text-slate-500 text-sm font-normal">/ 5.0</span>
             </div>
           </div>
-          <div className="flex items-center justify-between text-xs pt-2 border-t border-slate-100">
-            <span className="text-amber-600 font-semibold flex items-center gap-0.5">
+          <div className="flex items-center justify-between text-xs pt-2 border-t border-slate-100 dark:border-slate-800">
+            <span className="text-amber-600 dark:text-amber-400 font-semibold flex items-center gap-0.5">
               +{currentAnalytics.summary.csatChange} pts
             </span>
-            <span className="text-slate-400 text-[11px]">{currentPreset.periodLabel}</span>
+            <span className="text-slate-400 dark:text-slate-500 text-[11px]">{currentPreset.periodLabel}</span>
           </div>
         </Card>
       </div>
@@ -332,10 +332,10 @@ export function DashboardOverview() {
         {/* Recent Conversations / Active Support Queue */}
         <div className="lg:col-span-2 space-y-4">
           <Card padding="none" className="overflow-hidden">
-            <div className="p-5 border-b border-slate-100 flex items-center justify-between">
+            <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
               <div>
-                <h3 className="font-semibold text-slate-900 text-sm">Recent Conversations</h3>
-                <p className="text-xs text-slate-500 mt-0.5">
+                <h3 className="font-semibold text-slate-900 dark:text-slate-100 text-sm">Recent Conversations</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                   Latest customer inquiries prioritized by AI confidence score
                 </p>
               </div>
@@ -349,28 +349,28 @@ export function DashboardOverview() {
               </Button>
             </div>
 
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-slate-100 dark:divide-slate-800">
               {tickets.slice(0, 5).map((ticket) => (
                 <div
                   key={ticket.id}
                   onClick={() => setInspectTicket(ticket)}
-                  className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-slate-50/80 transition-colors cursor-pointer group"
+                  className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors cursor-pointer group"
                 >
                   <div className="flex items-start gap-3 min-w-0">
                     <ChannelIcon channel={ticket.channel} />
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
-                        <span className="text-xs font-mono font-semibold text-violet-700 group-hover:underline">
+                        <span className="text-xs font-mono font-semibold text-violet-700 dark:text-violet-400 group-hover:underline">
                           {ticket.id}
                         </span>
                         <PriorityBadge priority={ticket.priority} />
                         <TicketStatusBadge status={ticket.status} />
                       </div>
-                      <h4 className="text-sm font-medium text-slate-800 mt-1 truncate group-hover:text-violet-900">
+                      <h4 className="text-sm font-medium text-slate-800 dark:text-slate-200 mt-1 truncate group-hover:text-violet-900 dark:group-hover:text-violet-300">
                         {ticket.subject}
                       </h4>
-                      <p className="text-xs text-slate-400 mt-0.5 flex items-center gap-2">
-                        <span className="font-medium text-slate-600">{ticket.customer}</span>
+                      <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5 flex items-center gap-2">
+                        <span className="font-medium text-slate-600 dark:text-slate-300">{ticket.customer}</span>
                         <span>&bull;</span>
                         <span>Assignee: {ticket.assignee}</span>
                         <span>&bull;</span>
@@ -381,10 +381,10 @@ export function DashboardOverview() {
 
                   <div className="flex items-center gap-3 self-end sm:self-center shrink-0">
                     <div className="text-right hidden sm:block">
-                      <span className="text-[10px] text-slate-400 block uppercase font-medium">
+                      <span className="text-[10px] text-slate-400 dark:text-slate-500 block uppercase font-medium">
                         AI Confidence
                       </span>
-                      <span className="text-xs font-bold text-emerald-600">
+                      <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400">
                         {ticket.aiScore}%
                       </span>
                     </div>
@@ -415,7 +415,7 @@ export function DashboardOverview() {
                 action={
                   <button
                     onClick={() => navigate('/automations')}
-                    className="text-xs font-semibold text-violet-600 hover:text-violet-800 transition-colors flex items-center gap-1"
+                    className="text-xs font-semibold text-violet-600 dark:text-violet-400 hover:text-violet-800 dark:hover:text-violet-300 transition-colors flex items-center gap-1 cursor-pointer"
                   >
                     View Flows <ArrowRight size={12} />
                   </button>
@@ -427,22 +427,22 @@ export function DashboardOverview() {
                   <div
                     key={auto.id}
                     onClick={() => navigate('/automations')}
-                    className="p-3 rounded-xl border border-slate-100 bg-slate-50/50 hover:border-violet-200 hover:bg-violet-50/40 transition-all cursor-pointer group"
+                    className="p-3 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 hover:border-violet-200 dark:hover:border-violet-700 hover:bg-violet-50/40 dark:hover:bg-violet-950/30 transition-all cursor-pointer group"
                   >
                     <div className="flex items-center justify-between mb-1">
                       <div className="flex items-center gap-1.5 min-w-0">
                         <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
-                        <p className="text-xs font-semibold text-slate-800 truncate group-hover:text-violet-900">
+                        <p className="text-xs font-semibold text-slate-800 dark:text-slate-200 truncate group-hover:text-violet-900 dark:group-hover:text-violet-300">
                           {auto.name}
                         </p>
                       </div>
-                      <span className="text-[11px] font-bold text-slate-700 shrink-0">
+                      <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300 shrink-0">
                         {auto.runs.toLocaleString()} runs
                       </span>
                     </div>
-                    <p className="text-[11px] text-slate-400 truncate">{auto.trigger}</p>
-                    <div className="flex items-center justify-between text-[10px] text-slate-400 mt-2 pt-1.5 border-t border-slate-100/80">
-                      <span>Success: <strong className="text-emerald-600">{auto.successRate}%</strong></span>
+                    <p className="text-[11px] text-slate-400 dark:text-slate-500 truncate">{auto.trigger}</p>
+                    <div className="flex items-center justify-between text-[10px] text-slate-400 dark:text-slate-500 mt-2 pt-1.5 border-t border-slate-100/80 dark:border-slate-800/80">
+                      <span>Success: <strong className="text-emerald-600 dark:text-emerald-400">{auto.successRate}%</strong></span>
                       <span className="capitalize">{auto.channel} Cloud</span>
                     </div>
                   </div>
@@ -450,11 +450,11 @@ export function DashboardOverview() {
               </div>
             </div>
 
-            <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-              <span className="text-slate-500">6 workflows deployed</span>
+            <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs">
+              <span className="text-slate-500 dark:text-slate-400">6 workflows deployed</span>
               <button
                 onClick={() => navigate('/automations')}
-                className="text-violet-600 font-semibold hover:text-violet-800 transition-colors"
+                className="text-violet-600 dark:text-violet-400 font-semibold hover:text-violet-800 dark:hover:text-violet-300 transition-colors cursor-pointer"
               >
                 Create New Flow &rarr;
               </button>
@@ -478,7 +478,7 @@ export function DashboardOverview() {
                 title="Live Operations Feed"
                 subtitle="Real-time events from AI & specialists"
                 action={
-                  <span className="text-[11px] font-semibold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">
+                  <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full">
                     Streaming
                   </span>
                 }
@@ -487,15 +487,15 @@ export function DashboardOverview() {
               <div className="space-y-4 mt-2">
                 {activityFeed.map((act) => (
                   <div key={act.id} className="flex items-start gap-3 text-xs">
-                    <div className="w-2 h-2 rounded-full bg-violet-600 mt-1.5 shrink-0 ring-4 ring-violet-100" />
+                    <div className="w-2 h-2 rounded-full bg-violet-600 mt-1.5 shrink-0 ring-4 ring-violet-100 dark:ring-violet-950" />
                     <div className="flex-1 min-w-0">
-                      <p className="text-slate-800 leading-snug">
-                        <span className="font-semibold text-slate-900">{act.actor}</span>{' '}
+                      <p className="text-slate-800 dark:text-slate-200 leading-snug">
+                        <span className="font-semibold text-slate-900 dark:text-slate-100">{act.actor}</span>{' '}
                         {act.action}{' '}
-                        <span className="font-semibold text-violet-700">{act.target}</span>
+                        <span className="font-semibold text-violet-700 dark:text-violet-400">{act.target}</span>
                       </p>
-                      <p className="text-[11px] text-slate-400 mt-0.5 line-clamp-1">{act.detail}</p>
-                      <span className="text-[10px] text-slate-400 mt-1 block">
+                      <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5 line-clamp-1">{act.detail}</p>
+                      <span className="text-[10px] text-slate-400 dark:text-slate-500 mt-1 block">
                         {formatRelativeTime(act.time)}
                       </span>
                     </div>
@@ -504,7 +504,7 @@ export function DashboardOverview() {
               </div>
             </div>
 
-            <div className="mt-4 pt-3 border-t border-slate-100 text-center">
+            <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-center">
               <button
                 onClick={() =>
                   toast({
@@ -513,7 +513,7 @@ export function DashboardOverview() {
                     description: 'Full event stream exported for SOC2 compliance.',
                   })
                 }
-                className="text-xs text-slate-500 hover:text-slate-800 font-medium py-1 transition-colors"
+                className="text-xs text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 font-medium py-1 transition-colors cursor-pointer"
               >
                 Download Audit Trail
               </button>
@@ -625,48 +625,48 @@ export function DashboardOverview() {
           }
         >
           <div className="space-y-4">
-            <div className="p-3.5 rounded-xl bg-violet-50/70 border border-violet-100">
-              <span className="text-[10px] uppercase font-bold tracking-wider text-violet-600">
+            <div className="p-3.5 rounded-xl bg-violet-50/70 dark:bg-violet-950/40 border border-violet-100 dark:border-violet-900/60">
+              <span className="text-[10px] uppercase font-bold tracking-wider text-violet-600 dark:text-violet-400">
                 AI Suggestion Engine
               </span>
-              <p className="text-xs text-violet-900 font-medium mt-1">
+              <p className="text-xs text-violet-900 dark:text-violet-200 font-medium mt-1">
                 Confidence: {inspectTicket.aiScore}% &bull; Intent match confirmed
               </p>
-              <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">
+              <p className="text-xs text-slate-600 dark:text-slate-300 mt-1.5 leading-relaxed">
                 "Hello {inspectTicket.customer}, we have synced your query regarding '{inspectTicket.subject}' with our order management systems."
               </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100 text-xs">
+            <div className="grid grid-cols-2 gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 text-xs">
               <div>
-                <span className="text-slate-400 block">Channel</span>
-                <span className="font-semibold text-slate-800 capitalize flex items-center gap-1.5 mt-0.5">
+                <span className="text-slate-400 dark:text-slate-500 block">Channel</span>
+                <span className="font-semibold text-slate-800 dark:text-slate-200 capitalize flex items-center gap-1.5 mt-0.5">
                   <ChannelIcon channel={inspectTicket.channel} /> {inspectTicket.channel}
                 </span>
               </div>
               <div>
-                <span className="text-slate-400 block">Status</span>
+                <span className="text-slate-400 dark:text-slate-500 block">Status</span>
                 <span className="mt-1 inline-block">
                   <TicketStatusBadge status={inspectTicket.status} />
                 </span>
               </div>
               <div>
-                <span className="text-slate-400 block">Priority</span>
+                <span className="text-slate-400 dark:text-slate-500 block">Priority</span>
                 <span className="mt-1 inline-block">
                   <PriorityBadge priority={inspectTicket.priority} />
                 </span>
               </div>
               <div>
-                <span className="text-slate-400 block">Assignee</span>
-                <span className="font-medium text-slate-800 mt-0.5 block">
+                <span className="text-slate-400 dark:text-slate-500 block">Assignee</span>
+                <span className="font-medium text-slate-800 dark:text-slate-200 mt-0.5 block">
                   {inspectTicket.assignee}
                 </span>
               </div>
             </div>
 
             <div>
-              <h5 className="text-xs font-semibold text-slate-700 mb-1">Inquiry Subject</h5>
-              <p className="text-xs text-slate-700 bg-white p-3 rounded-xl border border-slate-200">
+              <h5 className="text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Inquiry Subject</h5>
+              <p className="text-xs text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-850 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
                 {inspectTicket.subject}
               </p>
             </div>

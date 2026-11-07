@@ -58,17 +58,17 @@ export function HandoverRulesManager({
   return (
     <div className="space-y-5">
       {/* Global Confidence Cutoff Slider */}
-      <div className="p-4 rounded-2xl bg-amber-50/50 border border-amber-200/60 space-y-2">
+      <div className="p-4 rounded-2xl bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/50 space-y-2">
         <div className="flex items-center justify-between text-xs">
-          <span className="font-bold text-amber-950 flex items-center gap-1.5">
-            <ShieldAlert size={14} className="text-amber-600" />
+          <span className="font-bold text-amber-950 dark:text-amber-300 flex items-center gap-1.5">
+            <ShieldAlert size={14} className="text-amber-600 dark:text-amber-400" />
             AI Confidence Threshold Cutoff
           </span>
-          <span className="font-bold text-amber-700 bg-white px-2 py-0.5 rounded-md border border-amber-200">
+          <span className="font-bold text-amber-700 dark:text-amber-400 bg-white dark:bg-slate-900 px-2 py-0.5 rounded-md border border-amber-200 dark:border-amber-800">
             {cutoffThreshold}%
           </span>
         </div>
-        <p className="text-[11px] text-amber-800/80 leading-relaxed">
+        <p className="text-[11px] text-amber-800/80 dark:text-amber-400/80 leading-relaxed">
           If the model's confidence falls below {cutoffThreshold}%, the agent automatically dispatches a polite holding message and escalates to a live agent specialist.
         </p>
         <input
@@ -83,8 +83,8 @@ export function HandoverRulesManager({
       </div>
 
       {/* Add Custom Handover Rule Form */}
-      <form onSubmit={handleAdd} className="p-4 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-3">
-        <span className="text-xs font-bold text-slate-900 block">
+      <form onSubmit={handleAdd} className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-700/80 space-y-3">
+        <span className="text-xs font-bold text-slate-900 dark:text-slate-100 block">
           Add Custom Trigger & Escalation Route
         </span>
         <div className="space-y-2">
@@ -93,14 +93,14 @@ export function HandoverRulesManager({
             value={condition}
             onChange={(e) => setCondition(e.target.value)}
             placeholder="e.g. User asks for refund > $300 OR sentiment score < 0.25"
-            className="w-full text-xs bg-white border border-slate-200 rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-violet-500/20"
+            className="w-full text-xs bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-violet-500/20"
           />
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
             <select
               value={targetRole}
               onChange={(e) => setTargetRole(e.target.value)}
-              className="text-xs bg-white border border-slate-200 rounded-xl px-2 py-2 outline-none"
+              className="text-xs bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 rounded-xl px-2 py-2 outline-none"
             >
               <option value="Senior Support Specialist">Senior Support Specialist</option>
               <option value="B2B Wholesale Director">B2B Wholesale Director</option>
@@ -111,7 +111,7 @@ export function HandoverRulesManager({
             <select
               value={priority}
               onChange={(e) => setPriority(e.target.value as any)}
-              className="text-xs bg-white border border-slate-200 rounded-xl px-2 py-2 outline-none"
+              className="text-xs bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 rounded-xl px-2 py-2 outline-none"
             >
               <option value="urgent">Urgent Priority</option>
               <option value="high">High Priority</option>
@@ -130,21 +130,21 @@ export function HandoverRulesManager({
         {rules.map((rule) => (
           <div
             key={rule.id}
-            className="p-3 rounded-xl border border-slate-100 bg-white flex items-center justify-between gap-3 shadow-2xs"
+            className="p-3 rounded-xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 flex items-center justify-between gap-3 shadow-2xs"
           >
             <div className="min-w-0">
               <div className="flex items-center gap-2 mb-1">
                 <PriorityBadge priority={rule.priority} />
-                <span className="text-xs font-semibold text-slate-800 truncate">
+                <span className="text-xs font-semibold text-slate-800 dark:text-slate-200 truncate">
                   &rarr; Transfer to {rule.targetRole}
                 </span>
               </div>
-              <p className="text-[11px] text-slate-500 truncate">{rule.condition}</p>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate">{rule.condition}</p>
             </div>
 
             <button
               onClick={() => onRemoveRule(rule.id)}
-              className="p-1.5 text-slate-400 hover:text-red-500 rounded-lg hover:bg-red-50 transition-colors shrink-0"
+              className="p-1.5 text-slate-400 hover:text-red-500 dark:hover:text-red-400 rounded-lg hover:bg-red-50 dark:hover:bg-red-950/40 transition-colors shrink-0"
               title="Delete handover rule"
             >
               <Trash2 size={13} />

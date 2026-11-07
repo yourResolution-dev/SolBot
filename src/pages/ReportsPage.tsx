@@ -164,21 +164,21 @@ export function ReportsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
               Analytics & Executive Reports
             </h1>
-            <span className="px-2.5 py-0.5 rounded-full bg-violet-100 text-violet-700 text-xs font-semibold">
+            <span className="px-2.5 py-0.5 rounded-full bg-violet-100 dark:bg-violet-950/70 text-violet-700 dark:text-violet-300 border border-violet-200/50 dark:border-violet-800/50 text-xs font-semibold">
               Live Data
             </span>
           </div>
-          <p className="text-xs sm:text-sm text-slate-500 mt-1">
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
             Track SLA performance, AI containment, agent workloads, and WhatsApp conversation volume
           </p>
         </div>
 
         {/* Date Filter & Export */}
-        <div className="flex items-center gap-2">
-          <div className="flex items-center bg-white border border-slate-200 rounded-xl p-1 shadow-xs">
+        <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex items-center bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-1 shadow-xs">
             {(['7d', '30d', '90d', '12m'] as const).map((r) => (
               <button
                 key={r}
@@ -193,7 +193,7 @@ export function ReportsPage() {
                 className={`px-3 py-1.5 text-xs font-medium rounded-lg capitalize transition-colors ${
                   range === r
                     ? 'bg-violet-600 text-white font-semibold shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-800'
                 }`}
               >
                 {r === '7d' ? '7 Days' : r === '30d' ? '30 Days' : r === '90d' ? 'Quarter' : '1 Year'}
@@ -215,64 +215,64 @@ export function ReportsPage() {
       {/* 5 Key Metric Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         <Card className="p-4 flex flex-col justify-between">
-          <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
             Total Conversations
           </span>
           <div className="my-2">
-            <div className="text-2xl font-bold text-slate-900">
+            <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">
               {current.totalVolume.toLocaleString()}
             </div>
           </div>
-          <span className="text-xs font-semibold text-emerald-600">
+          <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400">
             +{current.totalChange}% vs prior
           </span>
         </Card>
 
         <Card className="p-4 flex flex-col justify-between">
-          <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
             Resolution Rate
           </span>
           <div className="my-2">
-            <div className="text-2xl font-bold text-slate-900">
+            <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">
               {current.resolutionRate}%
             </div>
           </div>
-          <span className="text-xs font-semibold text-emerald-600">SLA Met (98%)</span>
+          <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400">SLA Met (98%)</span>
         </Card>
 
         <Card className="p-4 flex flex-col justify-between">
-          <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
             AI Containment
           </span>
           <div className="my-2">
-            <div className="text-2xl font-bold text-violet-700">
+            <div className="text-2xl font-bold text-violet-700 dark:text-violet-400">
               {current.aiContainmentRate}%
             </div>
           </div>
-          <span className="text-xs text-slate-400">No human handoff</span>
+          <span className="text-xs text-slate-400 dark:text-slate-500">No human handoff</span>
         </Card>
 
         <Card className="p-4 flex flex-col justify-between">
-          <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
             First Response
           </span>
           <div className="my-2">
-            <div className="text-2xl font-bold text-slate-900">
+            <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">
               {current.firstResponseTime}
             </div>
           </div>
-          <span className="text-xs font-semibold text-emerald-600">-18s reduction</span>
+          <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400">-18s reduction</span>
         </Card>
 
         <Card className="p-4 flex flex-col justify-between">
-          <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
             Customer CSAT
           </span>
           <div className="my-2 flex items-baseline gap-1">
-            <div className="text-2xl font-bold text-slate-900">{current.csat}</div>
-            <span className="text-slate-400 text-xs">/ 5.0</span>
+            <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">{current.csat}</div>
+            <span className="text-slate-400 dark:text-slate-500 text-xs">/ 5.0</span>
           </div>
-          <span className="text-xs font-semibold text-amber-600 flex items-center gap-1">
+          <span className="text-xs font-semibold text-amber-600 dark:text-amber-400 flex items-center gap-1">
             <Star size={11} className="fill-amber-400 text-amber-400" /> Top 5% SaaS
           </span>
         </Card>
@@ -285,12 +285,12 @@ export function ReportsPage() {
           subtitle={`Daily volume breakdown across ${current.periodLabel}`}
           action={
             <div className="flex items-center gap-4 text-xs font-medium">
-              <span className="flex items-center gap-1.5">
+              <span className="flex items-center gap-1.5 text-slate-700 dark:text-slate-300">
                 <span className="w-2.5 h-2.5 rounded-full bg-violet-600" />
                 AI Auto-Resolved
               </span>
-              <span className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-slate-300" />
+              <span className="flex items-center gap-1.5 text-slate-700 dark:text-slate-300">
+                <span className="w-2.5 h-2.5 rounded-full bg-slate-300 dark:bg-slate-600" />
                 Human Handled
               </span>
             </div>
@@ -314,7 +314,7 @@ export function ReportsPage() {
                   className="flex-1 flex flex-col items-center h-full justify-end group cursor-pointer relative"
                 >
                   {isHovered && (
-                    <div className="absolute -top-16 z-20 bg-slate-900 text-white text-[11px] py-1.5 px-3 rounded-xl shadow-xl whitespace-nowrap animate-slide-up pointer-events-none">
+                    <div className="absolute -top-16 z-20 bg-slate-900 dark:bg-slate-800 text-white text-[11px] py-1.5 px-3 rounded-xl shadow-xl whitespace-nowrap animate-slide-up pointer-events-none border border-transparent dark:border-slate-700">
                       <p className="font-bold text-violet-300">{d.day}</p>
                       <p className="text-slate-200">
                         Total: <span className="font-bold text-white">{d.total.toLocaleString()}</span>
@@ -334,7 +334,7 @@ export function ReportsPage() {
                     }`}
                     style={{ height: `${totalH}%` }}
                   >
-                    <div className="w-full bg-slate-200" style={{ height: `${humanH}%` }} />
+                    <div className="w-full bg-slate-200 dark:bg-slate-700" style={{ height: `${humanH}%` }} />
                     <div
                       className="w-full bg-gradient-to-t from-violet-700 via-violet-600 to-indigo-500"
                       style={{ height: `${aiH}%` }}
@@ -343,7 +343,7 @@ export function ReportsPage() {
 
                   <span
                     className={`text-[11px] font-medium mt-3 transition-colors ${
-                      isHovered ? 'text-violet-900 font-bold' : 'text-slate-500'
+                      isHovered ? 'text-violet-900 dark:text-violet-300 font-bold' : 'text-slate-500 dark:text-slate-400'
                     }`}
                   >
                     {d.day}
@@ -368,28 +368,28 @@ export function ReportsPage() {
               {current.channelBreakdown.map((ch) => (
                 <div
                   key={ch.channel}
-                  className="p-3.5 rounded-2xl border border-slate-100 bg-slate-50/50 space-y-2"
+                  className="p-3.5 rounded-2xl border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50 space-y-2"
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <ChannelIcon channel={ch.channel} />
-                      <span className="font-bold text-xs text-slate-800">{ch.name}</span>
+                      <span className="font-bold text-xs text-slate-800 dark:text-slate-200">{ch.name}</span>
                     </div>
-                    <span className="font-bold text-xs text-slate-900">{ch.share}%</span>
+                    <span className="font-bold text-xs text-slate-900 dark:text-slate-100">{ch.share}%</span>
                   </div>
 
-                  <div className="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden">
+                  <div className="w-full bg-slate-200 dark:bg-slate-700 h-1.5 rounded-full overflow-hidden">
                     <div
                       className="h-full bg-gradient-to-r from-violet-500 to-indigo-600 rounded-full"
                       style={{ width: `${ch.share}%` }}
                     />
                   </div>
 
-                  <div className="flex items-center justify-between text-[11px] text-slate-400">
+                  <div className="flex items-center justify-between text-[11px] text-slate-400 dark:text-slate-500">
                     <span>
-                      Avg First Response: <strong className="text-slate-700">{ch.avgTime}</strong>
+                      Avg First Response: <strong className="text-slate-700 dark:text-slate-300">{ch.avgTime}</strong>
                     </span>
-                    <span className="font-semibold text-amber-600 flex items-center gap-0.5">
+                    <span className="font-semibold text-amber-600 dark:text-amber-400 flex items-center gap-0.5">
                       <Star size={10} className="fill-amber-400 text-amber-400" /> {ch.csat}
                     </span>
                   </div>
@@ -409,7 +409,7 @@ export function ReportsPage() {
             <div className="overflow-x-auto">
               <table className="w-full text-xs">
                 <thead>
-                  <tr className="border-b border-slate-100 text-left text-[11px] font-semibold text-slate-400 uppercase">
+                  <tr className="border-b border-slate-100 dark:border-slate-800 text-left text-[11px] font-semibold text-slate-400 dark:text-slate-500 uppercase">
                     <th className="pb-3 px-3">Specialist</th>
                     <th className="pb-3 px-3">Status</th>
                     <th className="pb-3 px-3">Active</th>
@@ -417,27 +417,27 @@ export function ReportsPage() {
                     <th className="pb-3 px-3">CSAT Avg</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                   {agents.map((ag) => (
-                    <tr key={ag.id} className="hover:bg-slate-50/70 transition-colors">
+                    <tr key={ag.id} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/50 transition-colors">
                       <td className="py-3 px-3">
                         <div className="flex items-center gap-2.5">
                           <Avatar name={ag.name} size="sm" />
                           <div>
-                            <div className="font-bold text-slate-900">{ag.name}</div>
-                            <div className="text-[10px] text-slate-400">{ag.role}</div>
+                            <div className="font-bold text-slate-900 dark:text-slate-100">{ag.name}</div>
+                            <div className="text-[10px] text-slate-400 dark:text-slate-500">{ag.role}</div>
                           </div>
                         </div>
                       </td>
                       <td className="py-3 px-3">
                         <AgentStatusBadge status={ag.status} />
                       </td>
-                      <td className="py-3 px-3 font-semibold text-slate-800">{ag.ticketsOpen}</td>
-                      <td className="py-3 px-3 font-bold text-violet-700">
+                      <td className="py-3 px-3 font-semibold text-slate-800 dark:text-slate-200">{ag.ticketsOpen}</td>
+                      <td className="py-3 px-3 font-bold text-violet-700 dark:text-violet-400">
                         {ag.ticketsResolved}
                       </td>
                       <td className="py-3 px-3">
-                        <span className="font-bold text-amber-600 flex items-center gap-1">
+                        <span className="font-bold text-amber-600 dark:text-amber-400 flex items-center gap-1">
                           <Star size={11} className="fill-amber-400 text-amber-400" />
                           {ag.csat}
                         </span>
